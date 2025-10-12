@@ -1,0 +1,887 @@
+{
+	"info": {
+		"_postman_id": "e8c7b2d1-4a5b-4c6d-8e9f-1a2b3c4d5e6f",
+		"name": "RecyAI Clinic API - Hệ thống quản lý phòng khám Đông y",
+		"description": "API collection for Traditional Medicine Clinic Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "Patients",
+			"item": [
+				{
+					"name": "Create Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Nguyễn Văn A\",\n  \"phone\": \"0123456789\",\n  \"email\": \"nguyenvana@email.com\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"gender\": \"male\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/patients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Patients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/patients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Patient by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/patients/:patient_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients",
+								":patient_id"
+							],
+							"variable": [
+								{
+									"key": "patient_id",
+									"value": "655f8c123456789012345678"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Patient by Phone",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/patients/phone/:phone",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients",
+								"phone",
+								":phone"
+							],
+							"variable": [
+								{
+									"key": "phone",
+									"value": "0123456789"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Patient",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Nguyễn Văn A Updated\",\n  \"email\": \"updated@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/patients/:patient_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients",
+								":patient_id"
+							],
+							"variable": [
+								{
+									"key": "patient_id",
+									"value": "655f8c123456789012345678"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Patient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/patients/:patient_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients",
+								":patient_id"
+							],
+							"variable": [
+								{
+									"key": "patient_id",
+									"value": "655f8c123456789012345678"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Doctors",
+			"item": [
+				{
+					"name": "Create Doctor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Bác sĩ Nguyễn Thị B\",\n  \"specialization\": \"Châm cứu\",\n  \"phone\": \"0987654321\",\n  \"email\": \"bsnguyenthib@clinic.com\",\n  \"workingDays\": [1, 2, 3, 4, 5],\n  \"startTime\": \"08:00\",\n  \"endTime\": \"17:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Doctors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/doctors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Available Doctors by Day",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/doctors/available?day=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors",
+								"available"
+							],
+							"query": [
+								{
+									"key": "day",
+									"value": "1",
+									"description": "0-6, 0=Chủ nhật"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Doctor by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/doctors/:doctor_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors",
+								":doctor_id"
+							],
+							"variable": [
+								{
+									"key": "doctor_id",
+									"value": "655f8c123456789012345679"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Doctor",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"specialization\": \"Châm cứu và massage\",\n  \"phone\": \"0987654322\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors/:doctor_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors",
+								":doctor_id"
+							],
+							"variable": [
+								{
+									"key": "doctor_id",
+									"value": "655f8c123456789012345679"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Doctor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/doctors/:doctor_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors",
+								":doctor_id"
+							],
+							"variable": [
+								{
+									"key": "doctor_id",
+									"value": "655f8c123456789012345679"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "Create Service",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Khám và châm cứu\",\n  \"description\": \"Khám bệnh và điều trị bằng phương pháp châm cứu\",\n  \"duration\": 60,\n  \"price\": 300000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/services",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"services"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Services",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/services",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"services"
+							]
+						}
+					}
+				},
+				{
+					"name": "Filter Services by Price",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/services?minPrice=100000&maxPrice=500000",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"services"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "100000"
+								},
+								{
+									"key": "maxPrice",
+									"value": "500000"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Service by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/services/:service_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"services",
+								":service_id"
+							],
+							"variable": [
+								{
+									"key": "service_id",
+									"value": "655f8c12345678901234567a"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Service",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"price\": 350000,\n  \"description\": \"Khám bệnh và điều trị bằng phương pháp châm cứu - Cập nhật\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/services/:service_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"services",
+								":service_id"
+							],
+							"variable": [
+								{
+									"key": "service_id",
+									"value": "655f8c12345678901234567a"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Service",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/services/:service_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"services",
+								":service_id"
+							],
+							"variable": [
+								{
+									"key": "service_id",
+									"value": "655f8c12345678901234567a"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Appointments",
+			"item": [
+				{
+					"name": "Create Appointment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"patientId\": \"655f8c123456789012345678\",\n  \"doctorId\": \"655f8c123456789012345679\",\n  \"serviceId\": \"655f8c12345678901234567a\",\n  \"appointmentDate\": \"2023-12-15T09:00:00.000Z\",\n  \"isEmergency\": false,\n  \"note\": \"Bệnh nhân có triệu chứng đau lưng\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/appointments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Appointments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Emergency Appointments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments/emergency",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								"emergency"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Appointments by Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments/by-date?date=2023-12-01",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								"by-date"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-12-01"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Appointments by Patient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments/patient/:patient_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								"patient",
+								":patient_id"
+							],
+							"variable": [
+								{
+									"key": "patient_id",
+									"value": "655f8c123456789012345678"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Appointments by Doctor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments/doctor/:doctor_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								"doctor",
+								":doctor_id"
+							],
+							"variable": [
+								{
+									"key": "doctor_id",
+									"value": "655f8c123456789012345679"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Appointment by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments/:appointment_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								":appointment_id"
+							],
+							"variable": [
+								{
+									"key": "appointment_id",
+									"value": "655f8c12345678901234567b"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Appointment",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"appointmentDate\": \"2023-12-15T10:00:00.000Z\",\n  \"note\": \"Thay đổi giờ hẹn\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/appointments/:appointment_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								":appointment_id"
+							],
+							"variable": [
+								{
+									"key": "appointment_id",
+									"value": "655f8c12345678901234567b"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Cancel Appointment",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments/:appointment_id/cancel",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								":appointment_id",
+								"cancel"
+							],
+							"variable": [
+								{
+									"key": "appointment_id",
+									"value": "655f8c12345678901234567b"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Appointment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/appointments/:appointment_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments",
+								":appointment_id"
+							],
+							"variable": [
+								{
+									"key": "appointment_id",
+									"value": "655f8c12345678901234567b"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Create Notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipientType\": \"patient\",\n  \"recipientId\": \"655f8c123456789012345678\",\n  \"type\": \"appointment_created\",\n  \"message\": \"Lịch hẹn của bạn đã được tạo thành công\",\n  \"channel\": \"sms\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/notifications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notifications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Failed Notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/failed",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								"failed"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Notifications by Recipient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/recipient/:recipient_id?recipient_type=patient",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								"recipient",
+								":recipient_id"
+							],
+							"query": [
+								{
+									"key": "recipient_type",
+									"value": "patient"
+								}
+							],
+							"variable": [
+								{
+									"key": "recipient_id",
+									"value": "655f8c123456789012345678"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Notification by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/:notification_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								":notification_id"
+							],
+							"variable": [
+								{
+									"key": "notification_id",
+									"value": "655f8c12345678901234567c"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Mark Notification as Failed",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/:notification_id/failed",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								":notification_id",
+								"failed"
+							],
+							"variable": [
+								{
+									"key": "notification_id",
+									"value": "655f8c12345678901234567c"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Retry Notification",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/:notification_id/retry",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								":notification_id",
+								"retry"
+							],
+							"variable": [
+								{
+									"key": "notification_id",
+									"value": "655f8c12345678901234567c"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/:notification_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								":notification_id"
+							],
+							"variable": [
+								{
+									"key": "notification_id",
+									"value": "655f8c12345678901234567c"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
