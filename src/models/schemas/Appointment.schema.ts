@@ -12,7 +12,10 @@ interface IAppointment {
   patientId: ObjectId
   doctorId?: ObjectId
   serviceId: ObjectId
+  bedId?: ObjectId
   appointmentDate: Date
+  appointmentStartTime: string
+  appointmentEndTime: string
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
   isEmergency: boolean
   note?: string
@@ -26,7 +29,10 @@ export default class Appointment {
   patientId: ObjectId
   doctorId?: ObjectId
   serviceId: ObjectId
+  bedId?: ObjectId
   appointmentDate: Date
+  appointmentStartTime: string
+  appointmentEndTime: string
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
   isEmergency: boolean
   note?: string
@@ -40,7 +46,10 @@ export default class Appointment {
     this.patientId = appointment.patientId
     this.doctorId = appointment.doctorId
     this.serviceId = appointment.serviceId
+    this.bedId = appointment.bedId
     this.appointmentDate = appointment.appointmentDate
+    this.appointmentStartTime = appointment.appointmentStartTime
+    this.appointmentEndTime = appointment.appointmentEndTime
     this.status = appointment.status || 'pending'
     this.isEmergency = appointment.isEmergency || false
     this.note = appointment.note

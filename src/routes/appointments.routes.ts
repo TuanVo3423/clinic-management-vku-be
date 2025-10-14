@@ -7,10 +7,12 @@ import {
   getAppointmentsByPatientController,
   getAppointmentsByDoctorController,
   getAppointmentsByDateController,
+  getAppointmentsByTimeRangeController,
   getEmergencyAppointmentsController,
   updateAppointmentController,
   cancelAppointmentController
 } from '~/controllers/appointments.controller'
+import { createAppointmentValidator, updateAppointmentValidator } from '~/middlewares/appointments.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const appointmentsRouter = Router()
@@ -27,6 +29,11 @@ appointmentsRouter.get('/emergency', wrapRequestHandler(getEmergencyAppointments
 // Lấy lịch hẹn theo ngày
 appointmentsRouter.get('/by-date', wrapRequestHandler(getAppointmentsByDateController))
 
+// Lấy lịch hẹn theo khoảng thời gian (range)
+// Query params: startDate, endDate (required), doctorId, patientId (optional)
+// Example: /by-time-range?startDate=2023-10-14T09:00:00Z&endDate=2023-10-20T17:00:00Z&doctorId=123
+appointmentsRouter.get('/by-time-range', wrapRequestHandler(getAppointmentsByTimeRangeController))
+
 // Lấy lịch hẹn theo bệnh nhân
 appointmentsRouter.get('/patient/:patient_id', wrapRequestHandler(getAppointmentsByPatientController))
 
@@ -37,7 +44,11 @@ appointmentsRouter.get('/doctor/:doctor_id', wrapRequestHandler(getAppointmentsB
 appointmentsRouter.get('/:appointment_id', wrapRequestHandler(getAppointmentController))
 
 // Cập nhật lịch hẹn
-appointmentsRouter.patch('/:appointment_id', wrapRequestHandler(updateAppointmentController))
+appointmentsRouter.patch(
+  '/:appointment_id',
+  updateAppointmentValidator,
+  wrapRequestHandler(updateAppointmentController)
+)
 
 // Hủy lịch hẹn
 appointmentsRouter.patch('/:appointment_id/cancel', wrapRequestHandler(cancelAppointmentController))

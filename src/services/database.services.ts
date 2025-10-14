@@ -4,6 +4,7 @@ import Doctor from '~/models/schemas/Doctor.schema'
 import Service from '~/models/schemas/Service.schema'
 import Appointment from '~/models/schemas/Appointment.schema'
 import Notification from '~/models/schemas/Notification.schema'
+import Bed from '~/models/schemas/Bed.schema'
 
 class DatabaseServices {
   private client: MongoClient
@@ -41,6 +42,10 @@ class DatabaseServices {
 
   get notifications(): Collection<Notification> {
     return this.db.collection(process.env.DB_NOTIFICATIONS_COLLECTION as string)
+  }
+
+  get beds(): Collection<Bed> {
+    return this.db.collection(process.env.DB_BEDS_COLLECTION as string)
   }
 }
 

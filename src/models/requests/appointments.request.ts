@@ -4,15 +4,21 @@ export interface CreateAppointmentBody {
   patientId: string
   doctorId?: string
   serviceId: string
+  bedId?: string
   appointmentDate: string
   isEmergency?: boolean
   note?: string
+  appointmentStartTime: string
+  appointmentEndTime: string
 }
 
 export interface UpdateAppointmentBody {
   doctorId?: string
   serviceId?: string
+  bedId?: string
   appointmentDate?: string
+  appointmentStartTime?: string
+  appointmentEndTime?: string
   status?: 'pending' | 'confirmed' | 'cancelled' | 'completed'
   isEmergency?: boolean
   note?: string

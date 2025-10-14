@@ -10,6 +10,7 @@ import doctorsRouter from './routes/doctors.routes'
 import servicesRouter from './routes/services.routes'
 import appointmentsRouter from './routes/appointments.routes'
 import notificationsRouter from './routes/notifications.routes'
+import bedsRouter from './routes/beds.routes'
 import databaseServices from './services/database.services'
 
 databaseServices.connect()
@@ -29,6 +30,7 @@ app.use('/doctors', doctorsRouter)
 app.use('/services', servicesRouter)
 app.use('/appointments', appointmentsRouter)
 app.use('/notifications', notificationsRouter)
+app.use('/beds', bedsRouter)
 app.use(defaultErrorHandler)
 
 const server = app.listen(port, () => {
