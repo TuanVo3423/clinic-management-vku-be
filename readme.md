@@ -1,23 +1,35 @@
-# API Documentation - Hệ thống quản lý phòng khám Đông y
+# RecyAI Clinic API - Hệ thống quản lý phòng khám Đông y
 
 ## Tổng quan
-Hệ thống API quản lý phòng khám Đông y được xây dựng bằng Node.js, Express và MongoDB.
 
-## Collections
+Hệ thống API quản lý phòng khám Đông y được xây dựng bằng Node.js, Express và MongoDB. API này cung cấp đầy đủ các chức năng quản lý bệnh nhân, bác sĩ, dịch vụ, lịch hẹn, giường bệnh và thông báo.
 
-### 1. Patients (Bệnh nhân)
-- **Endpoint**: `/patients`
-- **Mô tả**: Quản lý thông tin bệnh nhân
+**Base URL:** `http://localhost:3000`
 
-#### Các API:
-- `POST /patients` - Tạo bệnh nhân mới
-- `GET /patients` - Lấy danh sách tất cả bệnh nhân
-- `GET /patients/:patient_id` - Lấy thông tin bệnh nhân theo ID
-- `GET /patients/phone/:phone` - Lấy bệnh nhân theo số điện thoại
-- `PATCH /patients/:patient_id` - Cập nhật thông tin bệnh nhân
-- `DELETE /patients/:patient_id` - Xóa bệnh nhân
+## Mục lục
 
-#### Body mẫu cho tạo bệnh nhân:
+- [1. Patients (Bệnh nhân)](#1-patients-bệnh-nhân)
+- [2. Doctors (Bác sĩ)](#2-doctors-bác-sĩ)
+- [3. Services (Dịch vụ)](#3-services-dịch-vụ)
+- [4. Appointments (Lịch hẹn)](#4-appointments-lịch-hẹn)
+- [5. Beds (Giường bệnh)](#5-beds-giường-bệnh)
+- [6. Notifications (Thông báo)](#6-notifications-thông-báo)
+
+---
+
+## 1. Patients (Bệnh nhân)
+
+**Endpoint:** `/patients`  
+**Mô tả:** Quản lý thông tin bệnh nhân
+
+### Các API:
+
+#### 1.1 Tạo bệnh nhân mới
+
+- **Method:** `POST`
+- **URL:** `/patients`
+- **Body:**
+
 ```json
 {
   "fullName": "Nguyễn Văn A",
@@ -28,19 +40,58 @@ Hệ thống API quản lý phòng khám Đông y được xây dựng bằng No
 }
 ```
 
-### 2. Doctors (Bác sĩ)
-- **Endpoint**: `/doctors`
-- **Mô tả**: Quản lý thông tin bác sĩ
+#### 1.2 Lấy danh sách tất cả bệnh nhân
 
-#### Các API:
-- `POST /doctors` - Tạo bác sĩ mới
-- `GET /doctors` - Lấy danh sách tất cả bác sĩ
-- `GET /doctors/available?day=1` - Lấy bác sĩ có thể làm việc trong ngày (0-6, 0=Chủ nhật)
-- `GET /doctors/:doctor_id` - Lấy thông tin bác sĩ theo ID
-- `PATCH /doctors/:doctor_id` - Cập nhật thông tin bác sĩ
-- `DELETE /doctors/:doctor_id` - Xóa bác sĩ
+- **Method:** `GET`
+- **URL:** `/patients`
 
-#### Body mẫu cho tạo bác sĩ:
+#### 1.3 Lấy thông tin bệnh nhân theo ID
+
+- **Method:** `GET`
+- **URL:** `/patients/:patient_id`
+- **Params:** `patient_id` (ObjectId)
+
+#### 1.4 Lấy bệnh nhân theo số điện thoại
+
+- **Method:** `GET`
+- **URL:** `/patients/phone/:phone`
+- **Params:** `phone` (string)
+
+#### 1.5 Cập nhật thông tin bệnh nhân
+
+- **Method:** `PATCH`
+- **URL:** `/patients/:patient_id`
+- **Params:** `patient_id` (ObjectId)
+- **Body:**
+
+```json
+{
+  "fullName": "Nguyễn Văn A Updated",
+  "email": "updated@email.com"
+}
+```
+
+#### 1.6 Xóa bệnh nhân
+
+- **Method:** `DELETE`
+- **URL:** `/patients/:patient_id`
+- **Params:** `patient_id` (ObjectId)
+
+---
+
+## 2. Doctors (Bác sĩ)
+
+**Endpoint:** `/doctors`  
+**Mô tả:** Quản lý thông tin bác sĩ
+
+### Các API:
+
+#### 2.1 Tạo bác sĩ mới
+
+- **Method:** `POST`
+- **URL:** `/doctors`
+- **Body:**
+
 ```json
 {
   "name": "Bác sĩ Nguyễn Thị B",
@@ -53,19 +104,58 @@ Hệ thống API quản lý phòng khám Đông y được xây dựng bằng No
 }
 ```
 
-### 3. Services (Dịch vụ)
-- **Endpoint**: `/services`
-- **Mô tả**: Quản lý dịch vụ phòng khám
+#### 2.2 Lấy danh sách tất cả bác sĩ
 
-#### Các API:
-- `POST /services` - Tạo dịch vụ mới
-- `GET /services` - Lấy danh sách tất cả dịch vụ
-- `GET /services?minPrice=100000&maxPrice=500000` - Lọc dịch vụ theo khoảng giá
-- `GET /services/:service_id` - Lấy thông tin dịch vụ theo ID
-- `PATCH /services/:service_id` - Cập nhật thông tin dịch vụ
-- `DELETE /services/:service_id` - Xóa dịch vụ
+- **Method:** `GET`
+- **URL:** `/doctors`
 
-#### Body mẫu cho tạo dịch vụ:
+#### 2.3 Lấy bác sĩ có thể làm việc trong ngày
+
+- **Method:** `GET`
+- **URL:** `/doctors/available?day=1`
+- **Query Params:** `day` (0-6, 0=Chủ nhật)
+
+#### 2.4 Lấy thông tin bác sĩ theo ID
+
+- **Method:** `GET`
+- **URL:** `/doctors/:doctor_id`
+- **Params:** `doctor_id` (ObjectId)
+
+#### 2.5 Cập nhật thông tin bác sĩ
+
+- **Method:** `PATCH`
+- **URL:** `/doctors/:doctor_id`
+- **Params:** `doctor_id` (ObjectId)
+- **Body:**
+
+```json
+{
+  "specialization": "Châm cứu và massage",
+  "phone": "0987654322"
+}
+```
+
+#### 2.6 Xóa bác sĩ
+
+- **Method:** `DELETE`
+- **URL:** `/doctors/:doctor_id`
+- **Params:** `doctor_id` (ObjectId)
+
+---
+
+## 3. Services (Dịch vụ)
+
+**Endpoint:** `/services`  
+**Mô tả:** Quản lý dịch vụ phòng khám
+
+### Các API:
+
+#### 3.1 Tạo dịch vụ mới
+
+- **Method:** `POST`
+- **URL:** `/services`
+- **Body:**
+
 ```json
 {
   "name": "Khám và châm cứu",
@@ -75,23 +165,60 @@ Hệ thống API quản lý phòng khám Đông y được xây dựng bằng No
 }
 ```
 
-### 4. Appointments (Lịch hẹn)
-- **Endpoint**: `/appointments`
-- **Mô tả**: Quản lý lịch hẹn khám
+#### 3.2 Lấy danh sách tất cả dịch vụ
 
-#### Các API:
-- `POST /appointments` - Tạo lịch hẹn mới
-- `GET /appointments` - Lấy danh sách tất cả lịch hẹn
-- `GET /appointments/emergency` - Lấy lịch hẹn khẩn cấp
-- `GET /appointments/by-date?date=2023-12-01` - Lấy lịch hẹn theo ngày
-- `GET /appointments/patient/:patient_id` - Lấy lịch hẹn của bệnh nhân
-- `GET /appointments/doctor/:doctor_id` - Lấy lịch hẹn của bác sĩ
-- `GET /appointments/:appointment_id` - Lấy thông tin lịch hẹn theo ID
-- `PATCH /appointments/:appointment_id` - Cập nhật lịch hẹn
-- `PATCH /appointments/:appointment_id/cancel` - Hủy lịch hẹn
-- `DELETE /appointments/:appointment_id` - Xóa lịch hẹn
+- **Method:** `GET`
+- **URL:** `/services`
 
-#### Body mẫu cho tạo lịch hẹn:
+#### 3.3 Lọc dịch vụ theo khoảng giá
+
+- **Method:** `GET`
+- **URL:** `/services?minPrice=100000&maxPrice=500000`
+- **Query Params:**
+  - `minPrice` (number): Giá tối thiểu
+  - `maxPrice` (number): Giá tối đa
+
+#### 3.4 Lấy thông tin dịch vụ theo ID
+
+- **Method:** `GET`
+- **URL:** `/services/:service_id`
+- **Params:** `service_id` (ObjectId)
+
+#### 3.5 Cập nhật thông tin dịch vụ
+
+- **Method:** `PATCH`
+- **URL:** `/services/:service_id`
+- **Params:** `service_id` (ObjectId)
+- **Body:**
+
+```json
+{
+  "price": 350000,
+  "description": "Khám bệnh và điều trị bằng phương pháp châm cứu - Cập nhật"
+}
+```
+
+#### 3.6 Xóa dịch vụ
+
+- **Method:** `DELETE`
+- **URL:** `/services/:service_id`
+- **Params:** `service_id` (ObjectId)
+
+---
+
+## 4. Appointments (Lịch hẹn)
+
+**Endpoint:** `/appointments`  
+**Mô tả:** Quản lý lịch hẹn khám bệnh
+
+### Các API:
+
+#### 4.1 Tạo lịch hẹn mới
+
+- **Method:** `POST`
+- **URL:** `/appointments`
+- **Body:**
+
 ```json
 {
   "patientId": "655f8c123456789012345678",
@@ -103,21 +230,181 @@ Hệ thống API quản lý phòng khám Đông y được xây dựng bằng No
 }
 ```
 
-### 5. Notifications (Thông báo)
-- **Endpoint**: `/notifications`
-- **Mô tả**: Quản lý thông báo gửi cho bệnh nhân/bác sĩ
+#### 4.2 Tạo lịch hẹn với giường bệnh
 
-#### Các API:
-- `POST /notifications` - Tạo thông báo mới
-- `GET /notifications` - Lấy danh sách tất cả thông báo
-- `GET /notifications/failed` - Lấy thông báo gửi thất bại
-- `GET /notifications/recipient/:recipient_id?recipient_type=patient` - Lấy thông báo theo người nhận
-- `GET /notifications/:notification_id` - Lấy thông tin thông báo theo ID
-- `PATCH /notifications/:notification_id/failed` - Đánh dấu thông báo thất bại
-- `PATCH /notifications/:notification_id/retry` - Thử lại gửi thông báo
-- `DELETE /notifications/:notification_id` - Xóa thông báo
+- **Method:** `POST`
+- **URL:** `/appointments`
+- **Body:**
 
-#### Body mẫu cho tạo thông báo:
+```json
+{
+  "patientId": "655f8c123456789012345678",
+  "doctorId": "655f8c123456789012345679",
+  "serviceId": "655f8c12345678901234567a",
+  "bedId": "655f8c12345678901234567d",
+  "appointmentDate": "2025-10-15",
+  "appointmentStartTime": "09:00",
+  "appointmentEndTime": "11:00",
+  "isEmergency": false,
+  "note": "Patient requires bed rest"
+}
+```
+
+#### 4.3 Lấy danh sách tất cả lịch hẹn
+
+- **Method:** `GET`
+- **URL:** `/appointments`
+
+#### 4.4 Lấy lịch hẹn khẩn cấp
+
+- **Method:** `GET`
+- **URL:** `/appointments/emergency`
+
+#### 4.5 Lấy lịch hẹn theo ngày
+
+- **Method:** `GET`
+- **URL:** `/appointments/by-date?date=2023-12-01`
+- **Query Params:** `date` (YYYY-MM-DD)
+
+#### 4.6 Lấy lịch hẹn của bệnh nhân
+
+- **Method:** `GET`
+- **URL:** `/appointments/patient/:patient_id`
+- **Params:** `patient_id` (ObjectId)
+
+#### 4.7 Lấy lịch hẹn của bác sĩ
+
+- **Method:** `GET`
+- **URL:** `/appointments/doctor/:doctor_id`
+- **Params:** `doctor_id` (ObjectId)
+
+#### 4.8 Lấy thông tin lịch hẹn theo ID
+
+- **Method:** `GET`
+- **URL:** `/appointments/:appointment_id`
+- **Params:** `appointment_id` (ObjectId)
+
+#### 4.9 Cập nhật lịch hẹn
+
+- **Method:** `PATCH`
+- **URL:** `/appointments/:appointment_id`
+- **Params:** `appointment_id` (ObjectId)
+- **Body:**
+
+```json
+{
+  "appointmentDate": "2023-12-15T10:00:00.000Z",
+  "note": "Thay đổi giờ hẹn"
+}
+```
+
+#### 4.10 Hủy lịch hẹn
+
+- **Method:** `PATCH`
+- **URL:** `/appointments/:appointment_id/cancel`
+- **Params:** `appointment_id` (ObjectId)
+
+#### 4.11 Xóa lịch hẹn
+
+- **Method:** `DELETE`
+- **URL:** `/appointments/:appointment_id`
+- **Params:** `appointment_id` (ObjectId)
+
+---
+
+## 5. Beds (Giường bệnh)
+
+**Endpoint:** `/beds`  
+**Mô tả:** Quản lý giường bệnh và tình trạng sử dụng
+
+### Các API:
+
+#### 5.1 Tạo giường bệnh mới
+
+- **Method:** `POST`
+- **URL:** `/beds`
+- **Body:**
+
+```json
+{
+  "bedNumber": 11,
+  "bedName": "Bed 11 - VIP Room",
+  "department": "VIP",
+  "description": "Private VIP room bed"
+}
+```
+
+#### 5.2 Lấy danh sách tất cả giường bệnh
+
+- **Method:** `GET`
+- **URL:** `/beds`
+
+#### 5.3 Lấy giường bệnh có sẵn trong khoảng thời gian
+
+- **Method:** `GET`
+- **URL:** `/beds/available?appointmentDate=2025-10-15&appointmentStartTime=09:00&appointmentEndTime=11:00`
+- **Query Params:**
+  - `appointmentDate` (YYYY-MM-DD): Ngày hẹn
+  - `appointmentStartTime` (HH:MM): Giờ bắt đầu
+  - `appointmentEndTime` (HH:MM): Giờ kết thúc
+
+#### 5.4 Kiểm tra tính khả dụng của giường
+
+- **Method:** `GET`
+- **URL:** `/beds/check-availability?bedId=bed_id&appointmentDate=2025-10-15&appointmentStartTime=09:00&appointmentEndTime=11:00`
+- **Query Params:**
+  - `bedId` (ObjectId): ID giường bệnh
+  - `appointmentDate` (YYYY-MM-DD): Ngày hẹn
+  - `appointmentStartTime` (HH:MM): Giờ bắt đầu
+  - `appointmentEndTime` (HH:MM): Giờ kết thúc
+
+#### 5.5 Lấy thông tin giường bệnh theo ID
+
+- **Method:** `GET`
+- **URL:** `/beds/:bed_id`
+- **Params:** `bed_id` (ObjectId)
+
+#### 5.6 Lấy lịch hẹn của giường bệnh
+
+- **Method:** `GET`
+- **URL:** `/beds/:bed_id/appointments`
+- **Params:** `bed_id` (ObjectId)
+
+#### 5.7 Cập nhật thông tin giường bệnh
+
+- **Method:** `PUT`
+- **URL:** `/beds/:bed_id`
+- **Params:** `bed_id` (ObjectId)
+- **Body:**
+
+```json
+{
+  "isAvailable": false,
+  "description": "Under maintenance"
+}
+```
+
+#### 5.8 Xóa giường bệnh
+
+- **Method:** `DELETE`
+- **URL:** `/beds/:bed_id`
+- **Params:** `bed_id` (ObjectId)
+
+---
+
+## 6. Notifications (Thông báo)
+
+**Endpoint:** `/notifications`  
+**Mô tả:** Quản lý thông báo gửi cho bệnh nhân và bác sĩ
+
+### Các API:
+
+#### 6.1 Tạo thông báo mới
+
+- **Method:** `POST`
+- **URL:** `/notifications`
+- **Body:**
+
 ```json
 {
   "recipientType": "patient",
@@ -128,54 +415,128 @@ Hệ thống API quản lý phòng khám Đông y được xây dựng bằng No
 }
 ```
 
-## Thiết lập Database
+#### 6.2 Lấy danh sách tất cả thông báo
 
-### Environment Variables
-Thêm vào file `.env`:
+- **Method:** `GET`
+- **URL:** `/notifications`
+
+#### 6.3 Lấy thông báo gửi thất bại
+
+- **Method:** `GET`
+- **URL:** `/notifications/failed`
+
+#### 6.4 Lấy thông báo theo người nhận
+
+- **Method:** `GET`
+- **URL:** `/notifications/recipient/:recipient_id?recipient_type=patient`
+- **Params:** `recipient_id` (ObjectId)
+- **Query Params:** `recipient_type` (patient/doctor)
+
+#### 6.5 Lấy thông tin thông báo theo ID
+
+- **Method:** `GET`
+- **URL:** `/notifications/:notification_id`
+- **Params:** `notification_id` (ObjectId)
+
+#### 6.6 Đánh dấu thông báo thất bại
+
+- **Method:** `PATCH`
+- **URL:** `/notifications/:notification_id/failed`
+- **Params:** `notification_id` (ObjectId)
+
+#### 6.7 Thử lại gửi thông báo
+
+- **Method:** `PATCH`
+- **URL:** `/notifications/:notification_id/retry`
+- **Params:** `notification_id` (ObjectId)
+
+#### 6.8 Xóa thông báo
+
+- **Method:** `DELETE`
+- **URL:** `/notifications/:notification_id`
+- **Params:** `notification_id` (ObjectId)
+
+---
+
+## Biến môi trường (Environment Variables)
+
+### Postman Collection Variables:
+
+```
+baseUrl: http://localhost:3000
+bed_id: (được cập nhật động)
+patient_id: 655f8c123456789012345678
+doctor_id: 655f8c123456789012345679
+service_id: 655f8c12345678901234567a
+appointment_id: 655f8c12345678901234567b
+```
+
+### Database Environment Variables:
+
 ```
 DB_PATIENTS_COLLECTION=patients
 DB_DOCTORS_COLLECTION=doctors
 DB_SERVICES_COLLECTION=services
 DB_APPOINTMENTS_COLLECTION=appointments
+DB_BEDS_COLLECTION=beds
 DB_NOTIFICATIONS_COLLECTION=notifications
 ```
 
-### Tạo Indexes
-Chạy lệnh để tạo indexes tối ưu cho database:
-```javascript
-import createIndexes from './src/utils/createIndexes'
-await createIndexes()
-```
+---
 
 ## Luồng hoạt động chính
 
-### 1. Đặt lịch hẹn mới:
+### 1. Đặt lịch hẹn cơ bản:
+
 1. Tạo/tìm bệnh nhân (nếu chưa có)
 2. Chọn dịch vụ
 3. Chọn bác sĩ (tùy chọn)
 4. Tạo lịch hẹn
 5. Hệ thống tự động gửi thông báo
 
-### 2. Quản lý lịch hẹn:
+### 2. Đặt lịch hẹn với giường bệnh:
+
+1. Kiểm tra giường bệnh có sẵn
+2. Tạo lịch hẹn với thông tin giường
+3. Giường sẽ được đặt trước trong khoảng thời gian đã chọn
+
+### 3. Quản lý lịch hẹn:
+
 - Xem lịch hẹn theo ngày/bác sĩ/bệnh nhân
 - Cập nhật thông tin lịch hẹn
 - Hủy lịch hẹn
 - Xử lý lịch hẹn khẩn cấp
 
-### 3. Thông báo:
+### 4. Quản lý giường bệnh:
+
+- Xem tình trạng giường
+- Kiểm tra khả dụng
+- Theo dõi lịch sử sử dụng
+
+### 5. Thông báo:
+
 - Tự động gửi khi tạo/cập nhật/hủy lịch hẹn
 - Theo dõi trạng thái gửi
 - Retry cho thông báo thất bại
 
+---
+
 ## Status Codes
+
 - `200` - Success
 - `201` - Created
 - `400` - Bad Request
 - `404` - Not Found
 - `500` - Internal Server Error
 
-## Notes
+---
+
+## Lưu ý quan trọng
+
 - Số điện thoại bệnh nhân là unique (dùng để nhận diện)
 - Lịch hẹn có history tracking tự động
 - Thông báo được gửi tự động khi có thay đổi lịch hẹn
 - Hỗ trợ lịch hẹn khẩn cấp
+- Giường bệnh có thể được đặt trước trong khoảng thời gian cụ thể
+- Hệ thống kiểm tra xung đột thời gian cho giường bệnh
+- Tất cả các ObjectId phải là MongoDB ObjectId hợp lệ

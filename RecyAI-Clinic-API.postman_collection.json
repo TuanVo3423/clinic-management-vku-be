@@ -686,6 +686,221 @@
 							]
 						}
 					}
+				},
+				{
+					"name": "Create Appointment with Bed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"patientId\": \"{{patient_id}}\",\n  \"doctorId\": \"{{doctor_id}}\",\n  \"serviceId\": \"{{service_id}}\",\n  \"bedId\": \"{{bed_id}}\",\n  \"appointmentDate\": \"2025-10-15\",\n  \"appointmentStartTime\": \"09:00\",\n  \"appointmentEndTime\": \"11:00\",\n  \"isEmergency\": false,\n  \"note\": \"Patient requires bed rest\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/appointments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appointments"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Beds",
+			"item": [
+				{
+					"name": "Get All Beds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/beds",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Available Beds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/beds/available?appointmentDate=2025-10-15&appointmentStartTime=09:00&appointmentEndTime=11:00",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds",
+								"available"
+							],
+							"query": [
+								{
+									"key": "appointmentDate",
+									"value": "2025-10-15"
+								},
+								{
+									"key": "appointmentStartTime",
+									"value": "09:00"
+								},
+								{
+									"key": "appointmentEndTime",
+									"value": "11:00"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Check Bed Availability",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/beds/check-availability?bedId={{bed_id}}&appointmentDate=2025-10-15&appointmentStartTime=09:00&appointmentEndTime=11:00",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds",
+								"check-availability"
+							],
+							"query": [
+								{
+									"key": "bedId",
+									"value": "{{bed_id}}"
+								},
+								{
+									"key": "appointmentDate",
+									"value": "2025-10-15"
+								},
+								{
+									"key": "appointmentStartTime",
+									"value": "09:00"
+								},
+								{
+									"key": "appointmentEndTime",
+									"value": "11:00"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Bed by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/beds/{{bed_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds",
+								"{{bed_id}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Bed Appointments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/beds/{{bed_id}}/appointments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds",
+								"{{bed_id}}",
+								"appointments"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Bed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"bedNumber\": 11,\n  \"bedName\": \"Bed 11 - VIP Room\",\n  \"department\": \"VIP\",\n  \"description\": \"Private VIP room bed\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/beds",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Bed",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isAvailable\": false,\n  \"description\": \"Under maintenance\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/beds/{{bed_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds",
+								"{{bed_id}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Bed",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/beds/{{bed_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"beds",
+								"{{bed_id}}"
+							]
+						}
+					}
 				}
 			]
 		},
@@ -881,6 +1096,31 @@
 		{
 			"key": "baseUrl",
 			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "bed_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "patient_id",
+			"value": "655f8c123456789012345678",
+			"type": "string"
+		},
+		{
+			"key": "doctor_id",
+			"value": "655f8c123456789012345679",
+			"type": "string"
+		},
+		{
+			"key": "service_id",
+			"value": "655f8c12345678901234567a",
+			"type": "string"
+		},
+		{
+			"key": "appointment_id",
+			"value": "655f8c12345678901234567b",
 			"type": "string"
 		}
 	]
