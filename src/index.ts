@@ -16,7 +16,7 @@ import databaseServices from './services/database.services'
 databaseServices.connect()
 const app = express()
 const port = 3000
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
+app.use(cors({ origin: 'http://localhost:8080', credentials: true }))
 app.use(bodyParser.json({ limit: '30mb' }))
 app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }))
 cloudinary.config({

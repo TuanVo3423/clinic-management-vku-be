@@ -17,10 +17,15 @@ const APPOINTMENTS_MESSAGES = {
   UPDATE_APPOINTMENT_SUCCESS: 'Update appointment successfully',
   DELETE_APPOINTMENT_SUCCESS: 'Delete appointment successfully',
   CANCEL_APPOINTMENT_SUCCESS: 'Cancel appointment successfully',
+  CONFIRM_APPOINTMENT_SUCCESS: 'Appointment confirmed successfully',
+  APPOINTMENT_PENDING_SUCCESS: 'Appointment status updated to pending successfully',
+  APPOINTMENT_CANCELLED_SUCCESS: 'Appointment cancelled successfully',
   APPOINTMENT_NOT_FOUND: 'Appointment not found',
   PATIENT_NOT_FOUND: 'Patient not found',
   GET_APPOINTMENTS_BY_DATE_SUCCESS: 'Get appointments by date successfully',
-  GET_EMERGENCY_APPOINTMENTS_SUCCESS: 'Get emergency appointments successfully'
+  GET_EMERGENCY_APPOINTMENTS_SUCCESS: 'Get emergency appointments successfully',
+  INVALID_STATUS: 'Invalid status. Status must be one of: pending, confirmed, cancelled',
+  STATUS_REQUIRED: 'Status is required'
 }
 
 export const createAppointmentController = async (
@@ -73,6 +78,59 @@ export const createAppointmentController = async (
     return res.status(201).json({
       message: APPOINTMENTS_MESSAGES.CREATE_APPOINTMENT_SUCCESS,
       appointment_id: appointment.insertedId
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const confirmAppointmentController = async (req: Request<any>, res: Response, next: NextFunction) => {
+  try {
+    const { appointment_id } = req.params
+    const { status } = req.body
+
+    // Validate status parameter
+    const validStatuses = ['pending', 'confirmed', 'cancelled']
+    if (!status) {
+      return res.status(400).json({ message: APPOINTMENTS_MESSAGES.STATUS_REQUIRED })
+    }
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        message: APPOINTMENTS_MESSAGES.INVALID_STATUS
+      })
+    }
+
+    // Check if appointment exists
+    const existingAppointment = await appointmentsServices.getAppointment(appointment_id)
+    if (!existingAppointment) {
+      return res.status(404).json({ message: APPOINTMENTS_MESSAGES.APPOINTMENT_NOT_FOUND })
+    }
+
+    // Update appointment status
+    const updatedAppointment = await appointmentsServices.updateAppointment(
+      appointment_id,
+      { status },
+      'doctor' // Assuming doctor is confirming the appointment
+    )
+
+    // Prepare response message based on status
+    let message = ''
+    switch (status) {
+      case 'confirmed':
+        message = APPOINTMENTS_MESSAGES.CONFIRM_APPOINTMENT_SUCCESS
+        break
+      case 'cancelled':
+        message = APPOINTMENTS_MESSAGES.APPOINTMENT_CANCELLED_SUCCESS
+        break
+      case 'pending':
+        message = APPOINTMENTS_MESSAGES.APPOINTMENT_PENDING_SUCCESS
+        break
+    }
+
+    return res.json({
+      message,
+      appointment: updatedAppointment
     })
   } catch (error) {
     next(error)
@@ -149,8 +207,15 @@ export const getAppointmentsByTimeRangeController = async (req: Request, res: Re
       })
     }
 
+    console.log('startDate before convert to Date', startDate)
+    console.log('endDate before convert to Date', endDate)
+
     const startDateTime = new Date(startDate as string)
     const endDateTime = new Date(endDate as string)
+    startDateTime.setHours(startDateTime.getHours() + 7)
+    endDateTime.setHours(endDateTime.getHours() + 7)
+    console.log('startDateTime', startDateTime)
+    console.log('endDateTime', endDateTime)
 
     // Validate date formats
     if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {

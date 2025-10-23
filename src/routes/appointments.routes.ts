@@ -10,7 +10,8 @@ import {
   getAppointmentsByTimeRangeController,
   getEmergencyAppointmentsController,
   updateAppointmentController,
-  cancelAppointmentController
+  cancelAppointmentController,
+  confirmAppointmentController
 } from '~/controllers/appointments.controller'
 import { createAppointmentValidator, updateAppointmentValidator } from '~/middlewares/appointments.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -19,6 +20,9 @@ const appointmentsRouter = Router()
 
 // Tạo lịch hẹn mới
 appointmentsRouter.post('/', wrapRequestHandler(createAppointmentController))
+
+// BS xác nhận lịch
+appointmentsRouter.post('/confirm/:appointment_id', wrapRequestHandler(confirmAppointmentController))
 
 // Lấy danh sách tất cả lịch hẹn
 appointmentsRouter.get('/', wrapRequestHandler(getAppointmentsController))
