@@ -509,28 +509,47 @@ class AppointmentsServices {
         {
           // Tạo field appointmentStart và appointmentEnd bằng cách kết hợp date + time
           $addFields: {
+            // Bước 1: Thay thế 'h' thành ':' trong time string
+            cleanedStartTime: {
+              $replaceAll: {
+                input: '$appointmentStartTime',
+                find: 'h',
+                replacement: ':'
+              }
+            },
+            cleanedEndTime: {
+              $replaceAll: {
+                input: '$appointmentEndTime',
+                find: 'h',
+                replacement: ':'
+              }
+            }
+          }
+        },
+        {
+          $addFields: {
             // Chuẩn hóa startTime: thêm :00 nếu chỉ có HH:MM
             normalizedStartTime: {
               $cond: {
                 if: {
-                  // Kiểm tra nếu appointmentStartTime có chứa dấu '-' (nghĩa là có date)
+                  // Kiểm tra nếu cleanedStartTime có chứa dấu '-' (nghĩa là có date)
                   $regexMatch: {
-                    input: '$appointmentStartTime',
+                    input: '$cleanedStartTime',
                     regex: '^\\d{4}-\\d{2}-\\d{2}'
                   }
                 },
-                then: '$appointmentStartTime', // Nếu là full datetime, giữ nguyên
+                then: '$cleanedStartTime', // Nếu là full datetime, giữ nguyên
                 else: {
                   // Nếu là time only, kiểm tra xem có seconds chưa
                   $cond: {
                     if: {
                       $regexMatch: {
-                        input: '$appointmentStartTime',
+                        input: '$cleanedStartTime',
                         regex: '^\\d{1,2}:\\d{2}:\\d{2}$'
                       }
                     },
-                    then: '$appointmentStartTime', // Đã có seconds (HH:MM:SS)
-                    else: { $concat: ['$appointmentStartTime', ':00'] } // Thêm :00 (HH:MM -> HH:MM:00)
+                    then: '$cleanedStartTime', // Đã có seconds (HH:MM:SS)
+                    else: { $concat: ['$cleanedStartTime', ':00'] } // Thêm :00 (HH:MM -> HH:MM:00)
                   }
                 }
               }
@@ -539,21 +558,21 @@ class AppointmentsServices {
               $cond: {
                 if: {
                   $regexMatch: {
-                    input: '$appointmentEndTime',
+                    input: '$cleanedEndTime',
                     regex: '^\\d{4}-\\d{2}-\\d{2}'
                   }
                 },
-                then: '$appointmentEndTime',
+                then: '$cleanedEndTime',
                 else: {
                   $cond: {
                     if: {
                       $regexMatch: {
-                        input: '$appointmentEndTime',
+                        input: '$cleanedEndTime',
                         regex: '^\\d{1,2}:\\d{2}:\\d{2}$'
                       }
                     },
-                    then: '$appointmentEndTime',
-                    else: { $concat: ['$appointmentEndTime', ':00'] }
+                    then: '$cleanedEndTime',
+                    else: { $concat: ['$cleanedEndTime', ':00'] }
                   }
                 }
               }

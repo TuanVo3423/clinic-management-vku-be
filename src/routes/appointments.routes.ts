@@ -11,7 +11,8 @@ import {
   getEmergencyAppointmentsController,
   updateAppointmentController,
   cancelAppointmentController,
-  confirmAppointmentController
+  confirmAppointmentController,
+  updateAppointmentForClientController
 } from '~/controllers/appointments.controller'
 import { createAppointmentValidator, updateAppointmentValidator } from '~/middlewares/appointments.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -56,6 +57,9 @@ appointmentsRouter.patch(
 
 // Hủy lịch hẹn
 appointmentsRouter.patch('/:appointment_id/cancel', wrapRequestHandler(cancelAppointmentController))
+
+// Update lịch hẹn của bệnh nhân (chỉ khi status là pending)
+appointmentsRouter.patch('/patient/:appointment_id', wrapRequestHandler(updateAppointmentForClientController))
 
 // Xóa lịch hẹn
 appointmentsRouter.delete('/:appointment_id', wrapRequestHandler(deleteAppointmentController))

@@ -306,6 +306,98 @@ export const updateAppointmentController = async (req: Request<any, any, any>, r
   }
 }
 
+export const updateAppointmentForClientController = async (
+  req: Request<any, any, any>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { appointment_id } = req.params
+    const updateData = req.body
+
+    // Kiểm tra xem lịch hẹn có tồn tại không
+    const existingAppointment = await appointmentsServices.getAppointment(appointment_id)
+    if (!existingAppointment) {
+      return res.status(404).json({ message: APPOINTMENTS_MESSAGES.APPOINTMENT_NOT_FOUND })
+    }
+
+    // Kiểm tra status của lịch hẹn - chỉ cho phép update khi status là pending
+    if (existingAppointment.status !== 'pending') {
+      return res.status(403).json({
+        message: 'Chỉ có thể cập nhật lịch hẹn ở trạng thái đang chờ (pending)',
+        currentStatus: existingAppointment.status
+      })
+    }
+
+    // Kiểm tra xung đột thời gian nếu cập nhật thời gian hoặc bác sĩ
+    const doctorId = updateData.doctorId || existingAppointment.doctorId
+    const appointmentDate = updateData.appointmentDate
+      ? new Date(updateData.appointmentDate)
+      : existingAppointment.appointmentDate
+    const startTime = updateData.appointmentStartTime || existingAppointment.appointmentStartTime
+    const endTime = updateData.appointmentEndTime || existingAppointment.appointmentEndTime
+
+    // Kiểm tra xung đột với bác sĩ nếu có thay đổi về thời gian/ngày/bác sĩ
+    if (
+      doctorId &&
+      (updateData.doctorId ||
+        updateData.appointmentDate ||
+        updateData.appointmentStartTime ||
+        updateData.appointmentEndTime)
+    ) {
+      const conflictCheck = await appointmentsServices.checkTimeConflict(
+        doctorId.toString(),
+        appointmentDate,
+        startTime,
+        endTime,
+        appointment_id
+      )
+
+      if (conflictCheck.hasConflict) {
+        return res.status(409).json({
+          message: 'Bác sĩ đã có lịch hẹn trong khoảng thời gian này',
+          conflictingAppointment: conflictCheck.conflictingAppointment
+        })
+      }
+    }
+
+    // Kiểm tra xung đột giường bệnh nếu có thay đổi
+    const bedId = updateData.bedId || existingAppointment.bedId
+    if (
+      bedId &&
+      (updateData.bedId ||
+        updateData.appointmentDate ||
+        updateData.appointmentStartTime ||
+        updateData.appointmentEndTime)
+    ) {
+      const bedConflictCheck = await appointmentsServices.checkBedConflict(
+        bedId.toString(),
+        appointmentDate,
+        startTime,
+        endTime,
+        appointment_id
+      )
+
+      if (bedConflictCheck.hasConflict) {
+        return res.status(409).json({
+          message: 'Giường bệnh đã được đặt trong khoảng thời gian này',
+          conflictingAppointment: bedConflictCheck.conflictingAppointment
+        })
+      }
+    }
+
+    // Cập nhật lịch hẹn với updatedBy là 'patient'
+    const appointment = await appointmentsServices.updateAppointment(appointment_id, updateData, 'patient')
+
+    return res.json({
+      message: APPOINTMENTS_MESSAGES.UPDATE_APPOINTMENT_SUCCESS,
+      appointment
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const cancelAppointmentController = async (req: Request<any>, res: Response, next: NextFunction) => {
   try {
     const existingAppointment = await appointmentsServices.getAppointment(req.params.appointment_id)
