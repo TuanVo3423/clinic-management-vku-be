@@ -51,7 +51,7 @@ appointmentsRouter.get('/:appointment_id', wrapRequestHandler(getAppointmentCont
 // Cập nhật lịch hẹn
 appointmentsRouter.patch(
   '/:appointment_id',
-  updateAppointmentValidator,
+  // updateAppointmentValidator,
   wrapRequestHandler(updateAppointmentController)
 )
 
