@@ -1,4 +1,5 @@
 import core from 'express-serve-static-core'
+import { AppointmentStatus } from '~/constants/enums'
 
 export interface CreateAppointmentBody {
   patientId: string
@@ -15,11 +16,12 @@ export interface CreateAppointmentBody {
 export interface UpdateAppointmentBody {
   doctorId?: string
   serviceId?: string
+  patientId?: string
   bedId?: string
   appointmentDate?: string
   appointmentStartTime?: string
   appointmentEndTime?: string
-  status?: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+  status?: AppointmentStatus
   isEmergency?: boolean
   note?: string
 }

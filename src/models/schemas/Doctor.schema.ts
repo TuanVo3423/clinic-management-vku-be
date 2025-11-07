@@ -6,6 +6,7 @@ interface IDoctor {
   specialization?: string
   phone?: string
   email?: string
+  password?: string
   workingDays: number[] // 0-6 (0 = Sunday)
   startTime: string // "HH:mm" format
   endTime: string // "HH:mm" format
@@ -18,6 +19,7 @@ export default class Doctor {
   specialization?: string
   phone?: string
   email?: string
+  password?: string
   workingDays: number[]
   startTime: string
   endTime: string
@@ -30,6 +32,7 @@ export default class Doctor {
     this.specialization = doctor.specialization
     this.phone = doctor.phone
     this.email = doctor.email
+    this.password = doctor.password
     this.workingDays = doctor.workingDays
     this.startTime = doctor.startTime
     this.endTime = doctor.endTime

@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import databaseServices from './database.services'
 import { CreateBedBody, UpdateBedBody } from '~/models/requests/beds.request'
 import Bed from '~/models/schemas/Bed.schema'
+import { AppointmentStatus } from '~/constants/enums'
 
 class BedsServices {
   async createBed(payload: CreateBedBody) {
@@ -28,7 +29,7 @@ class BedsServices {
     const appointments = await databaseServices.appointments
       .find({
         appointmentDate: appointmentDate,
-        status: { $in: ['pending', 'confirmed'] },
+        status: { $in: [AppointmentStatus.Pending, AppointmentStatus.Confirmed] },
         bedId: { $exists: true }
       })
       .toArray()
@@ -72,7 +73,7 @@ class BedsServices {
     // Check if bed has any active appointments
     const activeAppointments = await databaseServices.appointments.findOne({
       bedId: new ObjectId(_id),
-      status: { $in: ['pending', 'confirmed'] }
+      status: { $in: [AppointmentStatus.Pending, AppointmentStatus.Confirmed] }
     })
 
     if (activeAppointments) {
@@ -97,7 +98,7 @@ class BedsServices {
     const conflictingAppointment = await databaseServices.appointments.findOne({
       bedId: new ObjectId(bedId),
       appointmentDate: appointmentDate,
-      status: { $in: ['pending', 'confirmed'] },
+      status: { $in: [AppointmentStatus.Pending, AppointmentStatus.Confirmed] },
       $or: [
         {
           $and: [{ appointmentStartTime: { $lte: startTime } }, { appointmentEndTime: { $gt: startTime } }]

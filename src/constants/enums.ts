@@ -10,3 +10,10 @@ export enum TokenType {
   ForgotPasswordToken,
   EmailVerifyToken
 }
+
+export enum AppointmentStatus {
+  Pending = 'pending',
+  Confirmed = 'confirmed',
+  Cancelled = 'cancelled',
+  Completed = 'completed'
+}

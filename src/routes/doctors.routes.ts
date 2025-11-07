@@ -5,13 +5,21 @@ import {
   getDoctorController,
   getDoctorsController,
   getAvailableDoctorsController,
-  updateDoctorController
+  updateDoctorController,
+  loginDoctorController,
+  registerDoctorController
 } from '~/controllers/doctors.controller'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const doctorsRouter = Router()
 
-// Tạo bác sĩ mới
+// Đăng ký bác sĩ mới
+doctorsRouter.post('/register', wrapRequestHandler(registerDoctorController))
+
+// Đăng nhập bác sĩ
+doctorsRouter.post('/login', wrapRequestHandler(loginDoctorController))
+
+// Tạo bác sĩ mới (admin)
 doctorsRouter.post('/', wrapRequestHandler(createDoctorController))
 
 // Lấy danh sách tất cả bác sĩ

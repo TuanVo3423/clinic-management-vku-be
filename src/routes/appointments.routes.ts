@@ -14,7 +14,6 @@ import {
   confirmAppointmentController,
   updateAppointmentForClientController
 } from '~/controllers/appointments.controller'
-import { createAppointmentValidator, updateAppointmentValidator } from '~/middlewares/appointments.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const appointmentsRouter = Router()

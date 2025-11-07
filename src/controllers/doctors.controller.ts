@@ -1,6 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { CreateDoctorBody, FindDoctorParams, UpdateDoctorBody } from '~/models/requests/doctors.request'
+import {
+  CreateDoctorBody,
+  FindDoctorParams,
+  LoginDoctorBody,
+  RegisterDoctorBody,
+  UpdateDoctorBody
+} from '~/models/requests/doctors.request'
 import doctorsServices from '~/services/doctors.services'
 
 const DOCTORS_MESSAGES = {
@@ -10,7 +16,9 @@ const DOCTORS_MESSAGES = {
   UPDATE_DOCTOR_SUCCESS: 'Update doctor successfully',
   DELETE_DOCTOR_SUCCESS: 'Delete doctor successfully',
   DOCTOR_NOT_FOUND: 'Doctor not found',
-  GET_AVAILABLE_DOCTORS_SUCCESS: 'Get available doctors successfully'
+  GET_AVAILABLE_DOCTORS_SUCCESS: 'Get available doctors successfully',
+  LOGIN_SUCCESS: 'Login successfully',
+  REGISTER_SUCCESS: 'Register successfully'
 }
 
 export const createDoctorController = async (
@@ -20,9 +28,9 @@ export const createDoctorController = async (
 ) => {
   try {
     const doctor = await doctorsServices.createDoctor(req.body)
-    return res.status(201).json({ 
-      message: DOCTORS_MESSAGES.CREATE_DOCTOR_SUCCESS, 
-      doctor_id: doctor.insertedId 
+    return res.status(201).json({
+      message: DOCTORS_MESSAGES.CREATE_DOCTOR_SUCCESS,
+      doctor_id: doctor.insertedId
     })
   } catch (error) {
     next(error)
@@ -54,7 +62,7 @@ export const getAvailableDoctorsController = async (req: Request, res: Response,
   try {
     const { day } = req.query
     const dayNumber = parseInt(day as string, 10)
-    
+
     if (isNaN(dayNumber) || dayNumber < 0 || dayNumber > 6) {
       return res.status(400).json({ message: 'Invalid day parameter. Must be 0-6 (0=Sunday)' })
     }
@@ -87,6 +95,38 @@ export const deleteDoctorController = async (req: Request<any>, res: Response, n
       return res.status(404).json({ message: DOCTORS_MESSAGES.DOCTOR_NOT_FOUND })
     }
     return res.json({ message: DOCTORS_MESSAGES.DELETE_DOCTOR_SUCCESS })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const registerDoctorController = async (
+  req: Request<ParamsDictionary, any, RegisterDoctorBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await doctorsServices.register(req.body)
+    return res.status(201).json({
+      message: DOCTORS_MESSAGES.REGISTER_SUCCESS,
+      data: result
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const loginDoctorController = async (
+  req: Request<ParamsDictionary, any, LoginDoctorBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await doctorsServices.login(req.body)
+    return res.json({
+      message: DOCTORS_MESSAGES.LOGIN_SUCCESS,
+      data: result
+    })
   } catch (error) {
     next(error)
   }

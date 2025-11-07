@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import databaseServices from './database.services'
 import { CreateAppointmentBody, UpdateAppointmentBody } from '~/models/requests/appointments.request'
 import Appointment, { IAppointmentHistory } from '~/models/schemas/Appointment.schema'
+import { AppointmentStatus } from '~/constants/enums'
 
 class AppointmentsServices {
   async createAppointment(payload: CreateAppointmentBody) {
@@ -79,6 +80,7 @@ class AppointmentsServices {
         }
       ])
       .toArray()
+      console.log("appointments123", appointments)
     return appointments
   }
 
@@ -213,6 +215,12 @@ class AppointmentsServices {
     if (payload.appointmentEndTime) {
       updateData.appointmentEndTime = payload.appointmentEndTime
     }
+    if(payload.bedId){
+      updateData.bedId = new ObjectId(payload.bedId)
+    }
+    if(payload.patientId){
+      updateData.patientId = new ObjectId(payload.patientId)
+    }
 
     updateData.updatedAt = new Date()
 
@@ -268,7 +276,7 @@ class AppointmentsServices {
       { _id: new ObjectId(_id) },
       {
         $set: {
-          status: 'cancelled',
+          status: AppointmentStatus.Cancelled,
           updatedAt: new Date()
         },
         $push: { history: historyEntry }

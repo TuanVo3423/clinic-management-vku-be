@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { AppointmentStatus } from '~/constants/enums'
 
 interface IAppointmentHistory {
   action: 'created' | 'updated' | 'cancelled'
@@ -16,8 +17,10 @@ interface IAppointment {
   appointmentDate: Date
   appointmentStartTime: string
   appointmentEndTime: string
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+  status: AppointmentStatus
   isEmergency: boolean
+  price?: number
+  isCharged?: boolean
   note?: string
   history: IAppointmentHistory[]
   createdAt?: Date
@@ -33,8 +36,10 @@ export default class Appointment {
   appointmentDate: Date
   appointmentStartTime: string
   appointmentEndTime: string
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+  status: AppointmentStatus
   isEmergency: boolean
+  price?: number
+  isCharged?: boolean
   note?: string
   history: IAppointmentHistory[]
   createdAt?: Date
@@ -46,11 +51,13 @@ export default class Appointment {
     this.patientId = appointment.patientId
     this.doctorId = appointment.doctorId
     this.serviceId = appointment.serviceId
+    this.price = appointment.price
+    this.isCharged = appointment.isCharged
     this.bedId = appointment.bedId
     this.appointmentDate = appointment.appointmentDate
     this.appointmentStartTime = appointment.appointmentStartTime
     this.appointmentEndTime = appointment.appointmentEndTime
-    this.status = appointment.status || 'pending'
+    this.status = appointment.status || AppointmentStatus.Pending
     this.isEmergency = appointment.isEmergency || false
     this.note = appointment.note
     this.history = appointment.history || []

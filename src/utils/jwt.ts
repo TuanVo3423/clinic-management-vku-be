@@ -1,0 +1,35 @@
+import jwt from 'jsonwebtoken'
+
+export interface SignTokenPayload {
+  payload: any
+  privateKey: string
+  options?: jwt.SignOptions
+}
+
+export const signToken = ({
+  payload,
+  privateKey,
+  options = {
+    algorithm: 'HS256'
+  }
+}: SignTokenPayload) => {
+  return new Promise<string>((resolve, reject) => {
+    jwt.sign(payload, privateKey, options, (error, token) => {
+      if (error) {
+        throw reject(error)
+      }
+      resolve(token as string)
+    })
+  })
+}
+
+export const verifyToken = ({ token, secretOrPublicKey }: { token: string; secretOrPublicKey: string }) => {
+  return new Promise<jwt.JwtPayload>((resolve, reject) => {
+    jwt.verify(token, secretOrPublicKey, (error, decoded) => {
+      if (error) {
+        throw reject(error)
+      }
+      resolve(decoded as jwt.JwtPayload)
+    })
+  })
+}
