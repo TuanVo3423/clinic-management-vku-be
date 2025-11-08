@@ -11,12 +11,24 @@ export const createAppointmentValidator = validate(
         errorMessage: 'Patient ID must be a string'
       }
     },
-    serviceId: {
+    serviceIds: {
       notEmpty: {
-        errorMessage: 'Service ID is required'
+        errorMessage: 'Service IDs are required'
       },
-      isString: {
-        errorMessage: 'Service ID must be a string'
+      isArray: {
+        errorMessage: 'Service IDs must be an array',
+        options: { min: 1 }
+      },
+      custom: {
+        options: (value) => {
+          if (!Array.isArray(value) || value.length === 0) {
+            throw new Error('At least one service ID is required')
+          }
+          if (!value.every((id: any) => typeof id === 'string')) {
+            throw new Error('All service IDs must be strings')
+          }
+          return true
+        }
       }
     },
     appointmentDate: {
@@ -90,10 +102,23 @@ export const updateAppointmentValidator = validate(
         errorMessage: 'Doctor ID must be a string'
       }
     },
-    serviceId: {
+    serviceIds: {
       optional: true,
-      isString: {
-        errorMessage: 'Service ID must be a string'
+      isArray: {
+        errorMessage: 'Service IDs must be an array'
+      },
+      custom: {
+        options: (value) => {
+          if (value !== undefined && value !== null) {
+            if (!Array.isArray(value) || value.length === 0) {
+              throw new Error('Service IDs must be a non-empty array')
+            }
+            if (!value.every((id: any) => typeof id === 'string')) {
+              throw new Error('All service IDs must be strings')
+            }
+          }
+          return true
+        }
       }
     },
     appointmentDate: {

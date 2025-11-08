@@ -10,7 +10,7 @@ class AppointmentsServices {
       ...payload,
       patientId: new ObjectId(payload.patientId),
       doctorId: payload.doctorId ? new ObjectId(payload.doctorId) : undefined,
-      serviceId: new ObjectId(payload.serviceId),
+      serviceIds: payload.serviceIds.map((id) => new ObjectId(id)),
       bedId: payload.bedId ? new ObjectId(payload.bedId) : undefined,
       appointmentDate: new Date(payload.appointmentDate),
       appointmentStartTime: payload.appointmentStartTime,
@@ -65,9 +65,9 @@ class AppointmentsServices {
         {
           $lookup: {
             from: process.env.DB_SERVICES_COLLECTION,
-            localField: 'serviceId',
+            localField: 'serviceIds',
             foreignField: '_id',
-            as: 'service'
+            as: 'services'
           }
         },
         {
@@ -80,7 +80,7 @@ class AppointmentsServices {
         }
       ])
       .toArray()
-      console.log("appointments123", appointments)
+    console.log('appointments123', appointments)
     return appointments
   }
 
@@ -107,9 +107,9 @@ class AppointmentsServices {
         {
           $lookup: {
             from: process.env.DB_SERVICES_COLLECTION,
-            localField: 'serviceId',
+            localField: 'serviceIds',
             foreignField: '_id',
-            as: 'service'
+            as: 'services'
           }
         },
         {
@@ -140,9 +140,9 @@ class AppointmentsServices {
         {
           $lookup: {
             from: process.env.DB_SERVICES_COLLECTION,
-            localField: 'serviceId',
+            localField: 'serviceIds',
             foreignField: '_id',
-            as: 'service'
+            as: 'services'
           }
         },
         {
@@ -174,9 +174,9 @@ class AppointmentsServices {
         {
           $lookup: {
             from: process.env.DB_SERVICES_COLLECTION,
-            localField: 'serviceId',
+            localField: 'serviceIds',
             foreignField: '_id',
-            as: 'service'
+            as: 'services'
           }
         },
         {
@@ -203,8 +203,8 @@ class AppointmentsServices {
     if (payload.doctorId) {
       updateData.doctorId = new ObjectId(payload.doctorId)
     }
-    if (payload.serviceId) {
-      updateData.serviceId = new ObjectId(payload.serviceId)
+    if (payload.serviceIds) {
+      updateData.serviceIds = payload.serviceIds.map((id) => new ObjectId(id))
     }
     if (payload.appointmentDate) {
       updateData.appointmentDate = new Date(payload.appointmentDate)
@@ -215,10 +215,10 @@ class AppointmentsServices {
     if (payload.appointmentEndTime) {
       updateData.appointmentEndTime = payload.appointmentEndTime
     }
-    if(payload.bedId){
+    if (payload.bedId) {
       updateData.bedId = new ObjectId(payload.bedId)
     }
-    if(payload.patientId){
+    if (payload.patientId) {
       updateData.patientId = new ObjectId(payload.patientId)
     }
 
@@ -348,9 +348,9 @@ class AppointmentsServices {
         {
           $lookup: {
             from: process.env.DB_SERVICES_COLLECTION,
-            localField: 'serviceId',
+            localField: 'serviceIds',
             foreignField: '_id',
-            as: 'service'
+            as: 'services'
           }
         },
         {
@@ -387,9 +387,9 @@ class AppointmentsServices {
         {
           $lookup: {
             from: process.env.DB_SERVICES_COLLECTION,
-            localField: 'serviceId',
+            localField: 'serviceIds',
             foreignField: '_id',
-            as: 'service'
+            as: 'services'
           }
         },
         { $sort: { createdAt: -1 } }
@@ -676,9 +676,9 @@ class AppointmentsServices {
         {
           $lookup: {
             from: process.env.DB_SERVICES_COLLECTION,
-            localField: 'serviceId',
+            localField: 'serviceIds',
             foreignField: '_id',
-            as: 'service'
+            as: 'services'
           }
         },
         {

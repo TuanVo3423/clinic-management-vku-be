@@ -12,7 +12,7 @@ interface IAppointment {
   _id?: ObjectId
   patientId: ObjectId
   doctorId?: ObjectId
-  serviceId: ObjectId
+  serviceIds: ObjectId[]
   bedId?: ObjectId
   appointmentDate: Date
   appointmentStartTime: string
@@ -31,7 +31,7 @@ export default class Appointment {
   _id?: ObjectId
   patientId: ObjectId
   doctorId?: ObjectId
-  serviceId: ObjectId
+  serviceIds: ObjectId[]
   bedId?: ObjectId
   appointmentDate: Date
   appointmentStartTime: string
@@ -50,7 +50,7 @@ export default class Appointment {
     this._id = appointment._id
     this.patientId = appointment.patientId
     this.doctorId = appointment.doctorId
-    this.serviceId = appointment.serviceId
+    this.serviceIds = appointment.serviceIds
     this.price = appointment.price
     this.isCharged = appointment.isCharged
     this.bedId = appointment.bedId

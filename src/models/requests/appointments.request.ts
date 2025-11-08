@@ -4,7 +4,7 @@ import { AppointmentStatus } from '~/constants/enums'
 export interface CreateAppointmentBody {
   patientId: string
   doctorId?: string
-  serviceId: string
+  serviceIds: string[]
   bedId?: string
   appointmentDate: string
   isEmergency?: boolean
@@ -15,7 +15,7 @@ export interface CreateAppointmentBody {
 
 export interface UpdateAppointmentBody {
   doctorId?: string
-  serviceId?: string
+  serviceIds?: string[]
   patientId?: string
   bedId?: string
   appointmentDate?: string
