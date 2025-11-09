@@ -3,18 +3,31 @@ import databaseServices from './database.services'
 import { CreateAppointmentBody, UpdateAppointmentBody } from '~/models/requests/appointments.request'
 import Appointment, { IAppointmentHistory } from '~/models/schemas/Appointment.schema'
 import { AppointmentStatus } from '~/constants/enums'
+import { APPOINTMENTS_MESSAGES } from '~/constants/message'
 
 class AppointmentsServices {
   async createAppointment(payload: CreateAppointmentBody) {
+    // Lấy thông tin các services để tính tổng price
+    const serviceObjectIds = payload.serviceIds.map((id) => new ObjectId(id))
+    const services = await databaseServices.services
+      .find({
+        _id: { $in: serviceObjectIds }
+      })
+      .toArray()
+
+    // Tính tổng price từ các services
+    const totalPrice = services.reduce((sum, service) => sum + (service.price || 0), 0)
+
     const appointmentData = {
       ...payload,
       patientId: new ObjectId(payload.patientId),
       doctorId: payload.doctorId ? new ObjectId(payload.doctorId) : undefined,
-      serviceIds: payload.serviceIds.map((id) => new ObjectId(id)),
+      serviceIds: serviceObjectIds,
       bedId: payload.bedId ? new ObjectId(payload.bedId) : undefined,
       appointmentDate: new Date(payload.appointmentDate),
       appointmentStartTime: payload.appointmentStartTime,
       appointmentEndTime: payload.appointmentEndTime,
+      price: totalPrice,
       history: [
         {
           action: 'created' as const,
@@ -205,6 +218,14 @@ class AppointmentsServices {
     }
     if (payload.serviceIds) {
       updateData.serviceIds = payload.serviceIds.map((id) => new ObjectId(id))
+
+      // Tính lại tổng price khi serviceIds thay đổi
+      const services = await databaseServices.services
+        .find({
+          _id: { $in: updateData.serviceIds }
+        })
+        .toArray()
+      updateData.price = services.reduce((sum, service) => sum + (service.price || 0), 0)
     }
     if (payload.appointmentDate) {
       updateData.appointmentDate = new Date(payload.appointmentDate)
@@ -220,6 +241,10 @@ class AppointmentsServices {
     }
     if (payload.patientId) {
       updateData.patientId = new ObjectId(payload.patientId)
+    }
+    if (payload.isCheckout == true) {
+      updateData.isCheckout = true
+      updateData.status = AppointmentStatus.Completed
     }
 
     updateData.updatedAt = new Date()
@@ -689,6 +714,49 @@ class AppointmentsServices {
       ])
       .toArray()
 
+    return appointments
+  }
+
+  // Lấy appointments theo status
+  async getAppointmentsByStatus(status: AppointmentStatus) {
+    const appointments = await databaseServices.appointments
+      .aggregate([
+        { $match: { status: status } },
+        {
+          $lookup: {
+            from: process.env.DB_PATIENTS_COLLECTION,
+            localField: 'patientId',
+            foreignField: '_id',
+            as: 'patient'
+          }
+        },
+        {
+          $lookup: {
+            from: process.env.DB_DOCTORS_COLLECTION,
+            localField: 'doctorId',
+            foreignField: '_id',
+            as: 'doctor'
+          }
+        },
+        {
+          $lookup: {
+            from: process.env.DB_SERVICES_COLLECTION,
+            localField: 'serviceIds',
+            foreignField: '_id',
+            as: 'services'
+          }
+        },
+        {
+          $lookup: {
+            from: process.env.DB_BEDS_COLLECTION,
+            localField: 'bedId',
+            foreignField: '_id',
+            as: 'bed'
+          }
+        },
+        { $sort: { appointmentDate: -1 } }
+      ])
+      .toArray()
     return appointments
   }
 

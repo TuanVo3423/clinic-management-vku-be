@@ -12,7 +12,8 @@ import {
   updateAppointmentController,
   cancelAppointmentController,
   confirmAppointmentController,
-  updateAppointmentForClientController
+  updateAppointmentForClientController,
+  getAppointmentsByStatusController
 } from '~/controllers/appointments.controller'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -29,6 +30,11 @@ appointmentsRouter.get('/', wrapRequestHandler(getAppointmentsController))
 
 // Lấy lịch hẹn khẩn cấp
 appointmentsRouter.get('/emergency', wrapRequestHandler(getEmergencyAppointmentsController))
+
+// Lấy lịch hẹn theo status
+// Query params: status (required) - values: pending, confirmed, cancelled, completed
+// Example: /by-status?status=pending
+appointmentsRouter.get('/by-status', wrapRequestHandler(getAppointmentsByStatusController))
 
 // Lấy lịch hẹn theo ngày
 appointmentsRouter.get('/by-date', wrapRequestHandler(getAppointmentsByDateController))

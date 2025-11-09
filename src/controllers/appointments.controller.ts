@@ -423,3 +423,29 @@ export const deleteAppointmentController = async (req: Request<any>, res: Respon
     next(error)
   }
 }
+
+export const getAppointmentsByStatusController = async (req: Request<any>, res: Response, next: NextFunction) => {
+  try {
+    const { status } = req.query
+
+    // Validate status parameter
+    const validStatuses = ['pending', 'confirmed', 'cancelled', 'completed']
+    if (!status) {
+      return res.status(400).json({ message: 'Status is required' })
+    }
+
+    if (!validStatuses.includes(status as string)) {
+      return res.status(400).json({
+        message: 'Invalid status. Status must be one of: pending, confirmed, cancelled, completed'
+      })
+    }
+
+    const appointments = await appointmentsServices.getAppointmentsByStatus(status as any)
+    return res.json({
+      message: 'Get appointments by status successfully',
+      appointments
+    })
+  } catch (error) {
+    next(error)
+  }
+}

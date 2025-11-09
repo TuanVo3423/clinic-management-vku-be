@@ -23,6 +23,7 @@ export interface UpdateAppointmentBody {
   appointmentEndTime?: string
   status?: AppointmentStatus
   isEmergency?: boolean
+  isCheckout?: boolean
   note?: string
 }
 

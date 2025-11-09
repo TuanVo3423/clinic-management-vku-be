@@ -144,3 +144,9 @@ export const MESSAGES_MESSAGES = {
   MESSAGE_ID_MUST_BE_A_STRING: 'Message ID must be a string',
   MESSAGE_ID_NOT_FOUND: 'Message ID not found'
 } as const
+
+export const APPOINTMENTS_MESSAGES = {
+  APPOINTMENT_NOT_FOUND: 'Appointment not found',
+  CANNOT_COMPLETE_WITHOUT_CHECKOUT: 'Cannot complete appointment: Payment checkout has not been completed',
+  CHECKOUT_REQUIRED_FOR_COMPLETION: 'Appointment must be checked out (paid) before it can be marked as completed'
+} as const

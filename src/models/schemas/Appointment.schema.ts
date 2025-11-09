@@ -21,6 +21,7 @@ interface IAppointment {
   isEmergency: boolean
   price?: number
   isCharged?: boolean
+  isCheckout?: boolean
   note?: string
   history: IAppointmentHistory[]
   createdAt?: Date
@@ -40,6 +41,7 @@ export default class Appointment {
   isEmergency: boolean
   price?: number
   isCharged?: boolean
+  isCheckout?: boolean
   note?: string
   history: IAppointmentHistory[]
   createdAt?: Date
@@ -53,6 +55,7 @@ export default class Appointment {
     this.serviceIds = appointment.serviceIds
     this.price = appointment.price
     this.isCharged = appointment.isCharged
+    this.isCheckout = appointment.isCheckout || false
     this.bedId = appointment.bedId
     this.appointmentDate = appointment.appointmentDate
     this.appointmentStartTime = appointment.appointmentStartTime
