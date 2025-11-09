@@ -13,9 +13,12 @@ import notificationsRouter from './routes/notifications.routes'
 import bedsRouter from './routes/beds.routes'
 import databaseServices from './services/database.services'
 
-databaseServices.connect()
+// 👇 import watcher
+import { watchAppointments } from './watchers/appointmentWatcher'
+
 const app = express()
 const port = 3000
+
 app.use(cors({ origin: 'http://localhost:8080', credentials: true }))
 app.use(bodyParser.json({ limit: '30mb' }))
 app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }))
@@ -24,6 +27,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
+
 app.use(express.json())
 app.use('/patients', patientsRouter)
 app.use('/doctors', doctorsRouter)
@@ -33,6 +37,16 @@ app.use('/notifications', notificationsRouter)
 app.use('/beds', bedsRouter)
 app.use(defaultErrorHandler)
 
-const server = app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+const server = app.listen(port, async () => {
+  console.log(`✅ Server running on port ${port}`)
+
+  try {
+    await databaseServices.connect()
+    console.log('✅ Connected to MongoDB')
+
+    // 👇 Bắt đầu lắng nghe sự kiện thêm mới
+    watchAppointments()
+  } catch (error) {
+    console.error('❌ Lỗi kết nối MongoDB:', error)
+  }
 })

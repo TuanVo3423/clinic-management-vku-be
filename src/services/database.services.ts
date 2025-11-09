@@ -24,6 +24,10 @@ class DatabaseServices {
       throw error
     }
   }
+  getDB(): Db {
+    return this.db
+  }
+
   get patients(): Collection<Patient> {
     return this.db.collection(process.env.DB_PATIENTS_COLLECTION as string)
   }
