@@ -42,12 +42,12 @@ class AppointmentsServices {
 
     // Tạo thông báo sau khi tạo lịch hẹn
     const notificationData = {
+      appointmentId: appointment.insertedId,
+      isRead: false,
       recipientType: 'patient' as const,
       recipientId: new ObjectId(payload.patientId),
       type: 'appointment_created' as const,
-      message: `Lịch hẹn của bạn đã được tạo thành công cho ngày ${new Date(payload.appointmentDate).toLocaleDateString(
-        'vi-VN'
-      )} từ ${payload.appointmentStartTime} đến ${payload.appointmentEndTime}`,
+      message: `Có lịch hẹn được đặt từ ${payload.appointmentStartTime} đến ${payload.appointmentEndTime}`,
       channel: 'sms' as const
     }
 
@@ -277,6 +277,8 @@ class AppointmentsServices {
       }
 
       const notificationData = {
+        appointmentId: appointmentData._id,
+        isRead: false,
         recipientType: 'patient' as const,
         recipientId: appointmentData.patientId,
         type: 'appointment_updated' as const,
@@ -320,6 +322,8 @@ class AppointmentsServices {
       }
 
       const notificationData = {
+        appointmentId: appointmentData._id,
+        isRead: false,
         recipientType: 'patient' as const,
         recipientId: appointmentData.patientId,
         type: 'appointment_cancelled' as const,

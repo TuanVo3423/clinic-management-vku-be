@@ -7,12 +7,11 @@ class NotificationsServices {
   async createNotification(payload: CreateNotificationBody) {
     const notificationData = {
       ...payload,
-      recipientId: new ObjectId(payload.recipientId)
+      recipientId: new ObjectId(payload.recipientId),
+      appointmentId: new ObjectId(payload.appointmentId)
     }
 
-    const notification = await databaseServices.notifications.insertOne(
-      new Notification(notificationData as any)
-    )
+    const notification = await databaseServices.notifications.insertOne(new Notification(notificationData as any))
     return notification
   }
 
@@ -27,10 +26,13 @@ class NotificationsServices {
   }
 
   async getNotificationsByRecipient(recipientId: string, recipientType: 'patient' | 'doctor') {
-    const notifications = await databaseServices.notifications.find({
-      recipientId: new ObjectId(recipientId),
-      recipientType
-    }).sort({ createdAt: -1 }).toArray()
+    const notifications = await databaseServices.notifications
+      .find({
+        recipientId: new ObjectId(recipientId),
+        recipientType
+      })
+      .sort({ createdAt: -1 })
+      .toArray()
     return notifications
   }
 
@@ -39,6 +41,16 @@ class NotificationsServices {
       { _id: new ObjectId(_id) },
       {
         $set: { status: 'failed' }
+      }
+    )
+    return notification
+  }
+
+  async markNotificationAsRead(_id: string) {
+    const notification = await databaseServices.notifications.updateOne(
+      { _id: new ObjectId(_id) },
+      {
+        $set: { isRead: true }
       }
     )
     return notification
@@ -62,6 +74,23 @@ class NotificationsServices {
       }
     )
     return notification
+  }
+
+  async getNotificationsByReadStatus(isRead: boolean) {
+    const notifications = await databaseServices.notifications
+      .find({
+        isRead
+      })
+      .sort({ createdAt: -1 })
+      .toArray()
+    return notifications
+  }
+
+  async getUnreadNotificationsCount() {
+    const count = await databaseServices.notifications.countDocuments({
+      isRead: false
+    })
+    return count
   }
 }
 

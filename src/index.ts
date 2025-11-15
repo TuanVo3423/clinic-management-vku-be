@@ -12,9 +12,11 @@ import appointmentsRouter from './routes/appointments.routes'
 import notificationsRouter from './routes/notifications.routes'
 import bedsRouter from './routes/beds.routes'
 import databaseServices from './services/database.services'
+import socketService from './services/socket.services'
 
 // 👇 import watcher
 import { watchAppointments } from './watchers/appointmentWatcher'
+import { watchNotifications } from './watchers/notificationWatcher'
 
 const app = express()
 const port = 3000
@@ -44,8 +46,12 @@ const server = app.listen(port, async () => {
     await databaseServices.connect()
     console.log('✅ Connected to MongoDB')
 
+    // 👇 Khởi tạo Socket.IO
+    socketService.initialize(server)
+
     // 👇 Bắt đầu lắng nghe sự kiện thêm mới
     watchAppointments()
+    watchNotifications()
   } catch (error) {
     console.error('❌ Lỗi kết nối MongoDB:', error)
   }

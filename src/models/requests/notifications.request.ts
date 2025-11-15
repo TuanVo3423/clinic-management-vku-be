@@ -1,6 +1,8 @@
 import core from 'express-serve-static-core'
 
 export interface CreateNotificationBody {
+  isRead?: boolean
+  appointmentId: string
   recipientType: 'patient' | 'doctor'
   recipientId: string
   type: 'appointment_created' | 'appointment_updated' | 'appointment_cancelled'

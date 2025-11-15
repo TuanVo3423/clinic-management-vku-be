@@ -7,7 +7,10 @@ import {
   getNotificationsByRecipientController,
   getFailedNotificationsController,
   markNotificationAsFailedController,
-  retryNotificationController
+  retryNotificationController,
+  markNotificationAsReadController,
+  getNotificationsByReadStatusController,
+  getUnreadNotificationsCountController
 } from '~/controllers/notifications.controller'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -36,5 +39,14 @@ notificationsRouter.patch('/:notification_id/retry', wrapRequestHandler(retryNot
 
 // Xóa thông báo
 notificationsRouter.delete('/:notification_id', wrapRequestHandler(deleteNotificationController))
+
+// Đánh dấu thông báo đã đọc
+notificationsRouter.patch('/:notification_id/read', wrapRequestHandler(markNotificationAsReadController))
+
+// lấy ra thông báo theo trạng thái đã đọc hay chưa
+notificationsRouter.get('/status/:isRead', wrapRequestHandler(getNotificationsByReadStatusController))
+
+// lấy ra số lương thông báo chưa đọc
+notificationsRouter.get('/count/unread', wrapRequestHandler(getUnreadNotificationsCountController))
 
 export default notificationsRouter
