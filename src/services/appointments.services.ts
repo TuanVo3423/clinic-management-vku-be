@@ -2,8 +2,10 @@ import { ObjectId } from 'mongodb'
 import databaseServices from './database.services'
 import { CreateAppointmentBody, UpdateAppointmentBody } from '~/models/requests/appointments.request'
 import Appointment, { IAppointmentHistory } from '~/models/schemas/Appointment.schema'
-import { AppointmentStatus } from '~/constants/enums'
+import { AppointmentStatus, parseStatus } from '~/constants/enums'
 import { APPOINTMENTS_MESSAGES } from '~/constants/message'
+import { blockchainService } from './blockchain.services'
+import crypto from 'crypto'
 
 class AppointmentsServices {
   async createAppointment(payload: CreateAppointmentBody) {
@@ -38,7 +40,51 @@ class AppointmentsServices {
       ]
     }
 
+    // 1. Lưu vào MongoDB trước
     const appointment = await databaseServices.appointments.insertOne(new Appointment(appointmentData as any))
+
+    // 2. Lưu hash lên blockchain (asynchronous - không block user)
+    const appointmentId = appointment.insertedId.toString()
+    const dataForHash = {
+      _id: appointmentId,
+      patientId: payload.patientId,
+      doctorId: payload.doctorId,
+      serviceIds: payload.serviceIds,
+      appointmentStartTime: payload.appointmentStartTime,
+      appointmentEndTime: payload.appointmentEndTime,
+      price: totalPrice,
+      status: parseStatus(appointmentData.status ?? '') || AppointmentStatus.Pending
+    }
+
+    console.log("data lúc tạo nè", dataForHash);
+    // Lưu hash lên blockchain (không đợi để không làm chậm response)
+    blockchainService
+      .storeAppointmentHash(appointmentId, dataForHash)
+      .then((txHash) => {
+        if (txHash) {
+          // Tạo hash của data
+          const dataHash = crypto
+            .createHash('sha256')
+            .update(JSON.stringify(dataForHash, Object.keys(dataForHash).sort()))
+            .digest('hex')
+
+          // Cập nhật blockchain info vào MongoDB
+          databaseServices.appointments.updateOne(
+            { _id: appointment.insertedId },
+            {
+              $set: {
+                blockchainHash: '0x' + dataHash,
+                blockchainTxHash: txHash,
+                blockchainVerified: true
+              }
+            }
+          )
+          console.log(`✅ Appointment ${appointmentId} hash stored on blockchain`)
+        }
+      })
+      .catch((error) => {
+        console.error(`❌ Failed to store appointment ${appointmentId} on blockchain:`, error)
+      })
 
     // Tạo thông báo sau khi tạo lịch hẹn
     const notificationData = {
@@ -257,6 +303,7 @@ class AppointmentsServices {
       details: `Appointment updated by ${updatedBy}`
     }
 
+    // 1. Cập nhật MongoDB trước
     const appointment = await databaseServices.appointments.updateOne(
       { _id: new ObjectId(_id) },
       {
@@ -264,6 +311,49 @@ class AppointmentsServices {
         $push: { history: historyEntry }
       }
     )
+    
+
+    // 2. Cập nhật hash lên blockchain (asynchronous)
+    const updatedAppointment = await this.getAppointment(_id)
+    if (updatedAppointment) {
+      const dataForHash = {
+        _id: _id,
+        patientId: updatedAppointment.patientId?.toString(),
+        doctorId: updatedAppointment.doctorId?.toString(),
+        serviceIds: updatedAppointment.serviceIds?.map((id: any) => id.toString()),
+        appointmentStartTime: updatedAppointment.appointmentStartTime,
+        appointmentEndTime: updatedAppointment.appointmentEndTime,
+        price: updatedAppointment.price,
+        status: updatedAppointment.status
+      }
+
+      // Cập nhật hash lên blockchain (không đợi)
+      blockchainService
+        .updateAppointmentHash(_id, dataForHash)
+        .then((txHash) => {
+          if (txHash) {
+            const dataHash = crypto
+              .createHash('sha256')
+              .update(JSON.stringify(dataForHash, Object.keys(dataForHash).sort()))
+              .digest('hex')
+
+            databaseServices.appointments.updateOne(
+              { _id: new ObjectId(_id) },
+              {
+                $set: {
+                  blockchainHash: '0x' + dataHash,
+                  blockchainTxHash: txHash,
+                  blockchainVerified: true
+                }
+              }
+            )
+            console.log(`✅ Appointment ${_id} hash updated on blockchain`)
+          }
+        })
+        .catch((error) => {
+          console.error(`❌ Failed to update appointment ${_id} on blockchain:`, error)
+        })
+    }
 
     // Gửi thông báo cập nhật
     const appointmentData = await this.getAppointment(_id)
@@ -791,6 +881,83 @@ class AppointmentsServices {
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)
 
     return this.getAppointmentsByTimeRange(startOfMonth, endOfMonth, doctorId, patientId)
+  }
+
+  /**
+   * Verify tính toàn vẹn của appointment với blockchain
+   * @param _id Appointment ID
+   * @returns Kết quả verify
+   */
+  async verifyAppointmentIntegrity(_id: string) {
+    try {
+      // Lấy appointment từ MongoDB
+      const appointment = await this.getAppointment(_id)
+
+      if (!appointment) {
+        return {
+          success: false,
+          message: 'Appointment not found',
+          isValid: false
+        }
+      }
+
+      // Tạo data để hash (giống lúc store)
+      const dataForHash = {
+        _id: _id,
+        patientId: appointment.patientId?.toString(),
+        doctorId: appointment.doctorId?.toString(),
+        serviceIds: appointment.serviceIds?.map((id: any) => id.toString()),
+        appointmentStartTime: appointment.appointmentStartTime,
+        appointmentEndTime: appointment.appointmentEndTime,
+        price: appointment.price,
+        status: appointment.status
+      }
+
+      console.log("data lúc verify nè", dataForHash);
+
+      // Verify với blockchain
+      const verifyResult = await blockchainService.verifyAppointmentIntegrity(_id, dataForHash)
+
+      return {
+        success: true,
+        appointmentId: _id,
+        ...verifyResult,
+        blockchainInfo: {
+          blockchainHash: appointment.blockchainHash,
+          blockchainTxHash: appointment.blockchainTxHash,
+          blockchainVerified: appointment.blockchainVerified
+        }
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.message,
+        isValid: false
+      }
+    }
+  }
+
+  /**
+   * Lấy lịch sử thay đổi từ blockchain
+   * @param _id Appointment ID
+   * @returns Lịch sử hash changes
+   */
+  async getBlockchainHistory(_id: string) {
+    try {
+      const history = await blockchainService.getAppointmentHistory(_id)
+      return {
+        success: true,
+        appointmentId: _id,
+        history,
+        message: `Found ${history.length} change(s) on blockchain`
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.message,
+        history: []
+      }
+    }
   }
 }
 

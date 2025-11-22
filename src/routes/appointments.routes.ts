@@ -13,7 +13,9 @@ import {
   cancelAppointmentController,
   confirmAppointmentController,
   updateAppointmentForClientController,
-  getAppointmentsByStatusController
+  getAppointmentsByStatusController,
+  verifyAppointmentIntegrityController,
+  getAppointmentBlockchainHistoryController
 } from '~/controllers/appointments.controller'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -52,6 +54,12 @@ appointmentsRouter.get('/doctor/:doctor_id', wrapRequestHandler(getAppointmentsB
 
 // Lấy lịch hẹn theo ID
 appointmentsRouter.get('/:appointment_id', wrapRequestHandler(getAppointmentController))
+
+// Verify tính toàn vẹn dữ liệu với blockchain
+appointmentsRouter.get('/:appointment_id/verify', wrapRequestHandler(verifyAppointmentIntegrityController))
+
+// Lấy lịch sử thay đổi từ blockchain
+appointmentsRouter.get('/:appointment_id/blockchain-history', wrapRequestHandler(getAppointmentBlockchainHistoryController))
 
 // Cập nhật lịch hẹn
 appointmentsRouter.patch(

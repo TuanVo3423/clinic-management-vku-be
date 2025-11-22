@@ -449,3 +449,54 @@ export const getAppointmentsByStatusController = async (req: Request<any>, res: 
     next(error)
   }
 }
+
+/**
+ * Verify tính toàn vẹn của appointment với blockchain
+ */
+export const verifyAppointmentIntegrityController = async (
+  req: Request<any>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { appointment_id } = req.params
+    const result = await appointmentsServices.verifyAppointmentIntegrity(appointment_id)
+
+    if (!result.success) {
+      return res.status(404).json(result)
+    }
+
+    // Nếu data bị tamper
+    if (!result.isValid) {
+      return res.status(400).json({
+        ...result,
+        warning: '⚠️ DATA INTEGRITY VIOLATION: This appointment has been tampered with!'
+      })
+    }
+
+    return res.json({
+      ...result,
+      message: '✅ Data integrity verified successfully'
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+/**
+ * Lấy lịch sử thay đổi từ blockchain
+ */
+export const getAppointmentBlockchainHistoryController = async (
+  req: Request<any>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { appointment_id } = req.params
+    const result = await appointmentsServices.getBlockchainHistory(appointment_id)
+
+    return res.json(result)
+  } catch (error) {
+    next(error)
+  }
+}

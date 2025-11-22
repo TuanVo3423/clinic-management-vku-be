@@ -11,6 +11,7 @@ export interface CreateAppointmentBody {
   note?: string
   appointmentStartTime: string
   appointmentEndTime: string
+  status?: string
 }
 
 export interface UpdateAppointmentBody {

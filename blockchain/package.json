@@ -1,0 +1,11 @@
+{
+  "name": "clinic-blockchain",
+  "version": "1.0.0",
+  "description": "Blockchain smart contracts for clinic management",
+  "scripts": {
+    "node": "hardhat node",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:testnet": "hardhat run scripts/deploy.ts --network sepolia"
+  }
+}

@@ -24,6 +24,10 @@ interface IAppointment {
   isCheckout?: boolean
   note?: string
   history: IAppointmentHistory[]
+  // Blockchain fields
+  blockchainHash?: string // SHA256 hash của appointment data
+  blockchainTxHash?: string // Transaction hash khi lưu lên blockchain
+  blockchainVerified?: boolean // Flag kiểm tra đã verify hay chưa
   createdAt?: Date
   updatedAt?: Date
 }
@@ -44,6 +48,10 @@ export default class Appointment {
   isCheckout?: boolean
   note?: string
   history: IAppointmentHistory[]
+  // Blockchain fields
+  blockchainHash?: string
+  blockchainTxHash?: string
+  blockchainVerified?: boolean
   createdAt?: Date
   updatedAt?: Date
 
@@ -64,6 +72,10 @@ export default class Appointment {
     this.isEmergency = appointment.isEmergency || false
     this.note = appointment.note
     this.history = appointment.history || []
+    // Blockchain fields
+    this.blockchainHash = appointment.blockchainHash
+    this.blockchainTxHash = appointment.blockchainTxHash
+    this.blockchainVerified = appointment.blockchainVerified || false
     this.createdAt = appointment.createdAt || date
     this.updatedAt = appointment.updatedAt || date
   }

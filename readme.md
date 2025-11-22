@@ -4,7 +4,19 @@
 
 Hệ thống API quản lý phòng khám Đông y được xây dựng bằng Node.js, Express và MongoDB. API này cung cấp đầy đủ các chức năng quản lý bệnh nhân, bác sĩ, dịch vụ, lịch hẹn, giường bệnh và thông báo.
 
+**✨ NEW: Blockchain Integration** - Hệ thống đã tích hợp blockchain để đảm bảo tính toàn vẹn dữ liệu appointments!
+
 **Base URL:** `http://localhost:3000`
+
+## 🔐 Blockchain Features
+
+- **Data Integrity**: Mỗi appointment được hash và lưu lên blockchain
+- **Tamper Detection**: Tự động phát hiện nếu dữ liệu bị sửa đổi
+- **Immutable History**: Lịch sử thay đổi không thể xóa
+- **Verify API**: Endpoint để kiểm tra tính toàn vẹn
+
+👉 **Quick Start:** [BLOCKCHAIN_QUICK_START.md](./BLOCKCHAIN_QUICK_START.md)  
+📚 **Full Guide:** [BLOCKCHAIN_INTEGRATION_GUIDE.md](./BLOCKCHAIN_INTEGRATION_GUIDE.md)
 
 ## Mục lục
 
@@ -12,6 +24,7 @@ Hệ thống API quản lý phòng khám Đông y được xây dựng bằng No
 - [2. Doctors (Bác sĩ)](#2-doctors-bác-sĩ)
 - [3. Services (Dịch vụ)](#3-services-dịch-vụ)
 - [4. Appointments (Lịch hẹn)](#4-appointments-lịch-hẹn)
+  - [4.1 Blockchain Integration](#41-blockchain-integration-new)
 - [5. Beds (Giường bệnh)](#5-beds-giường-bệnh)
 - [6. Notifications (Thông báo)](#6-notifications-thông-báo)
 
@@ -309,6 +322,75 @@ Hệ thống API quản lý phòng khám Đông y được xây dựng bằng No
 - **Method:** `DELETE`
 - **URL:** `/appointments/:appointment_id`
 - **Params:** `appointment_id` (ObjectId)
+
+### 4.1 Blockchain Integration ✨ NEW
+
+#### 4.12 Verify Tính toàn vẹn dữ liệu
+
+- **Method:** `GET`
+- **URL:** `/appointments/:appointment_id/verify`
+- **Params:** `appointment_id` (ObjectId)
+- **Mô tả:** Kiểm tra xem dữ liệu appointment có bị sửa đổi không bằng cách so sánh với blockchain
+- **Response (Valid):**
+
+```json
+{
+  "success": true,
+  "appointmentId": "67a1b2c3...",
+  "isValid": true,
+  "currentHash": "0xabc123...",
+  "blockchainHash": "0xabc123...",
+  "message": "✅ Data integrity verified successfully",
+  "blockchainInfo": {
+    "blockchainHash": "0xabc123...",
+    "blockchainTxHash": "0xtx456...",
+    "blockchainVerified": true
+  }
+}
+```
+
+- **Response (Tampered):**
+
+```json
+{
+  "success": true,
+  "appointmentId": "67a1b2c3...",
+  "isValid": false,
+  "currentHash": "0xabc123...",
+  "blockchainHash": "0xdef456...",
+  "message": "Data has been tampered with!",
+  "warning": "⚠️ DATA INTEGRITY VIOLATION: This appointment has been tampered with!"
+}
+```
+
+#### 4.13 Lấy Lịch sử thay đổi từ Blockchain
+
+- **Method:** `GET`
+- **URL:** `/appointments/:appointment_id/blockchain-history`
+- **Params:** `appointment_id` (ObjectId)
+- **Mô tả:** Lấy toàn bộ lịch sử hash của appointment từ blockchain
+- **Response:**
+
+```json
+{
+  "success": true,
+  "appointmentId": "67a1b2c3...",
+  "history": [
+    "0xhash1...", // Created
+    "0xhash2...", // Updated 1
+    "0xhash3..."  // Updated 2
+  ],
+  "message": "Found 3 change(s) on blockchain"
+}
+```
+
+**📝 Lưu ý:**
+- Mỗi khi tạo hoặc update appointment, hash tự động được lưu lên blockchain
+- Việc lưu hash là async, không làm chậm response
+- Blockchain đảm bảo dữ liệu không thể bị sửa đổi sau khi lưu
+- Chi phí: FREE trên local/testnet, ~$0.20-$2 trên mainnet
+
+**🔧 Setup blockchain:** Xem [BLOCKCHAIN_QUICK_START.md](./BLOCKCHAIN_QUICK_START.md)
 
 ---
 
