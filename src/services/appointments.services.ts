@@ -75,7 +75,8 @@ class AppointmentsServices {
               $set: {
                 blockchainHash: '0x' + dataHash,
                 blockchainTxHash: txHash,
-                blockchainVerified: true
+                blockchainVerified: true,
+                isPendingSavingToBlockchain: false
               }
             }
           )
@@ -303,6 +304,8 @@ class AppointmentsServices {
       details: `Appointment updated by ${updatedBy}`
     }
 
+    updateData.isPendingSavingToBlockchain = true
+
     // 1. Cập nhật MongoDB trước
     const appointment = await databaseServices.appointments.updateOne(
       { _id: new ObjectId(_id) },
@@ -343,7 +346,8 @@ class AppointmentsServices {
                 $set: {
                   blockchainHash: '0x' + dataHash,
                   blockchainTxHash: txHash,
-                  blockchainVerified: true
+                  blockchainVerified: true,
+                  isPendingSavingToBlockchain: false
                 }
               }
             )
@@ -921,6 +925,7 @@ class AppointmentsServices {
       return {
         success: true,
         appointmentId: _id,
+        isPendingSavingToBlockchain: appointment.isPendingSavingToBlockchain,
         ...verifyResult,
         blockchainInfo: {
           blockchainHash: appointment.blockchainHash,

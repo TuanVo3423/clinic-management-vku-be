@@ -28,6 +28,7 @@ interface IAppointment {
   blockchainHash?: string // SHA256 hash của appointment data
   blockchainTxHash?: string // Transaction hash khi lưu lên blockchain
   blockchainVerified?: boolean // Flag kiểm tra đã verify hay chưa
+  isPendingSavingToBlockchain?: boolean // Flag tạm thời để đánh dấu đang chờ lưu lên blockchain
   createdAt?: Date
   updatedAt?: Date
 }
@@ -52,6 +53,7 @@ export default class Appointment {
   blockchainHash?: string
   blockchainTxHash?: string
   blockchainVerified?: boolean
+  isPendingSavingToBlockchain?: boolean // Flag tạm thời để đánh dấu đang chờ lưu lên blockchain
   createdAt?: Date
   updatedAt?: Date
 
@@ -76,6 +78,7 @@ export default class Appointment {
     this.blockchainHash = appointment.blockchainHash
     this.blockchainTxHash = appointment.blockchainTxHash
     this.blockchainVerified = appointment.blockchainVerified || false
+    this.isPendingSavingToBlockchain = appointment.isPendingSavingToBlockchain || true
     this.createdAt = appointment.createdAt || date
     this.updatedAt = appointment.updatedAt || date
   }

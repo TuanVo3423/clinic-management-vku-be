@@ -468,7 +468,7 @@ export const verifyAppointmentIntegrityController = async (
 
     // Nếu data bị tamper
     if (!result.isValid) {
-      return res.status(400).json({
+      return res.status(200).json({
         ...result,
         warning: '⚠️ DATA INTEGRITY VIOLATION: This appointment has been tampered with!'
       })
