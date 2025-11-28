@@ -20,7 +20,7 @@ export async function watchAppointments() {
 
         // ví dụ: gửi mail xác nhận cho bệnh nhân
         await mailService.sendMail(
-          'tuanvv.21it@vku.udn.vn', // đảm bảo field này tồn tại
+          process.env.EMAIL_ADMIN!, // đảm bảo field này tồn tại
           'Xác nhận lịch hẹn',
           `Xin chào, bạn đã có một lịch hẹn mới vào ngày ${newAppointment.appointmentStartTime}, vui lòng kiểm tra chi tiết trong hệ thống.`
         )

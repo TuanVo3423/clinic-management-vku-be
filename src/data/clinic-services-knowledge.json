@@ -1,0 +1,366 @@
+{
+  "clinicInfo": {
+    "name": "Phòng Khám Đa Khoa VKU",
+    "specialization": "Chuyên khoa Cơ Xương Khớp và Phục Hồi Chức Năng",
+    "description": "Phòng khám cung cấp các dịch vụ điều trị và phục hồi chức năng cho các bệnh lý về cơ, xương, khớp với đội ngũ bác sĩ giàu kinh nghiệm và trang thiết bị hiện đại."
+  },
+  "services": [
+    {
+      "id": 1,
+      "name": "Khám bệnh, tư vấn kê đơn thuốc",
+      "description": "Bác sĩ trực tiếp thăm khám, chẩn đoán tình trạng bệnh, tư vấn phương pháp điều trị phù hợp và kê đơn thuốc nếu cần thiết.",
+      "duration": 30,
+      "price": 0,
+      "suitable_for": [
+        "Đau nhức cơ thể chưa rõ nguyên nhân",
+        "Cần tư vấn về tình trạng sức khỏe cơ xương khớp",
+        "Cần kê đơn thuốc điều trị",
+        "Khám tổng quát về cơ xương khớp",
+        "Theo dõi sau điều trị"
+      ],
+      "conditions": [
+        "Đau cơ",
+        "Đau khớp",
+        "Viêm khớp",
+        "Thoát vị đĩa đệm",
+        "Đau lưng",
+        "Đau cổ",
+        "Đau vai gáy",
+        "Thoái hóa khớp",
+        "Viêm gân",
+        "Bong gân"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Châm cứu đèn hồng ngoại",
+      "description": "Kết hợp châm cứu và chiếu đèn hồng ngoại giúp tăng cường lưu thông máu, giảm đau, thư giãn cơ và phục hồi tổn thương mô mềm.",
+      "duration": 45,
+      "price": 250000,
+      "suitable_for": [
+        "Đau mỏi cơ mạn tính",
+        "Căng cơ, co cứng cơ",
+        "Đau thần kinh tọa",
+        "Đau vai gáy mạn tính",
+        "Tê bì chi",
+        "Lưu thông máu kém"
+      ],
+      "conditions": [
+        "Đau cơ mạn tính",
+        "Đau thần kinh",
+        "Liệt dây thần kinh ngoại biên",
+        "Viêm khớp",
+        "Đau vai gáy",
+        "Đau lưng mạn tính",
+        "Thoái hóa cột sống",
+        "Hội chứng ống cổ tay",
+        "Đau đầu gối",
+        "Bệnh Parkinson giai đoạn đầu"
+      ],
+      "benefits": [
+        "Tăng cường tuần hoàn máu",
+        "Giảm đau tự nhiên",
+        "Thư giãn cơ bắp",
+        "Giảm viêm",
+        "Cải thiện chức năng vận động"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Siêu âm điều trị",
+      "description": "Sử dụng sóng siêu âm tần số cao để giảm viêm, giảm đau và hỗ trợ tái tạo mô tổn thương trong các bệnh lý cơ xương khớp.",
+      "duration": 30,
+      "price": 200000,
+      "suitable_for": [
+        "Viêm gân, viêm bao hoạt dịch",
+        "Chấn thương mô mềm",
+        "Đau cơ cục bộ",
+        "Viêm khớp",
+        "Sẹo dính sau chấn thương"
+      ],
+      "conditions": [
+        "Viêm gân",
+        "Viêm khớp",
+        "Bong gân",
+        "Rách cơ",
+        "Đau cơ",
+        "Viêm bao hoạt dịch",
+        "Thoái hóa khớp",
+        "Viêm quanh khớp vai",
+        "Hội chứng ống cổ tay",
+        "Đau gót chân"
+      ],
+      "benefits": [
+        "Giảm viêm hiệu quả",
+        "Thúc đẩy tái tạo mô",
+        "Giảm đau nhanh",
+        "Cải thiện độ linh hoạt",
+        "Không xâm lấn"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Điều trị bằng sóng xung kích",
+      "description": "Dùng sóng xung kích cường độ cao tác động trực tiếp lên vùng tổn thương để giảm đau mạn tính, kích thích tái tạo mô và cải thiện vận động.",
+      "duration": 40,
+      "price": 400000,
+      "suitable_for": [
+        "Đau mạn tính không đáp ứng với điều trị thông thường",
+        "Vôi hóa gân",
+        "Viêm cân gan chân mạn tính",
+        "Đau vai mãn tính",
+        "Đau khuỷu tay"
+      ],
+      "conditions": [
+        "Viêm cân gan chân",
+        "Gai xương gót",
+        "Viêm khớp vai",
+        "Tennis elbow (viêm lồi cầu ngoài xương cánh tay)",
+        "Golf elbow (viêm lồi cầu trong xương cánh tay)",
+        "Vôi hóa gân",
+        "Đau mạn tính cơ xương khớp",
+        "Chấn thương thể thao",
+        "Hội chứng đau cơ mạn tính"
+      ],
+      "benefits": [
+        "Hiệu quả cao với đau mạn tính",
+        "Kích thích tái tạo mô",
+        "Phá vỡ vôi hóa",
+        "Tăng tuần hoàn máu",
+        "Giảm nhanh các triệu chứng"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Điện xung",
+      "description": "Điều trị bằng dòng điện xung tần số thấp giúp giảm đau, tăng tuần hoàn máu và phục hồi chức năng thần kinh – cơ.",
+      "duration": 30,
+      "price": 200000,
+      "suitable_for": [
+        "Đau cơ",
+        "Yếu cơ",
+        "Liệt nửa người",
+        "Teo cơ",
+        "Phục hồi sau chấn thương"
+      ],
+      "conditions": [
+        "Đau cơ",
+        "Yếu cơ",
+        "Teo cơ",
+        "Liệt mặt",
+        "Liệt dây thần kinh ngoại biên",
+        "Sau tai biến mạch máu não",
+        "Đau thần kinh",
+        "Bại liệt",
+        "Viêm đa dây thần kinh",
+        "Chấn thương thần kinh"
+      ],
+      "benefits": [
+        "Kích thích co cơ",
+        "Ngăn ngừa teo cơ",
+        "Giảm đau",
+        "Cải thiện lưu thông máu",
+        "Phục hồi chức năng thần kinh"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Kéo giãn cột sống",
+      "description": "Sử dụng máy kéo giãn hiện đại giúp giảm chèn ép thần kinh, cải thiện thoát vị đĩa đệm và giảm đau cột sống hiệu quả.",
+      "duration": 45,
+      "price": 300000,
+      "suitable_for": [
+        "Thoát vị đĩa đệm",
+        "Đau lưng do thoái hóa",
+        "Hẹp ống sống",
+        "Đau thần kinh tọa",
+        "Đau cổ vai gáy"
+      ],
+      "conditions": [
+        "Thoát vị đĩa đệm cột sống cổ",
+        "Thoát vị đĩa đệm cột sống thắt lưng",
+        "Thoái hóa cột sống",
+        "Đau thần kinh tọa",
+        "Hội chứng đau cổ vai gáy",
+        "Hẹp ống sống",
+        "Chèn ép rễ thần kinh",
+        "Thoái hóa đĩa đệm",
+        "Cứng khớp cột sống"
+      ],
+      "benefits": [
+        "Giảm chèn ép thần kinh",
+        "Tăng khoảng cách đốt sống",
+        "Giảm đau nhanh",
+        "Cải thiện vận động cột sống",
+        "Ngăn ngừa tiến triển bệnh"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Xoa bóp bấm huyệt và tập",
+      "description": "Phối hợp xoa bóp, bấm huyệt và hướng dẫn tập phục hồi giúp thư giãn cơ, giảm đau nhức, tăng độ linh hoạt và cải thiện sức khỏe tổng thể.",
+      "duration": 60,
+      "price": 350000,
+      "suitable_for": [
+        "Đau mỏi cơ toàn thân",
+        "Căng thẳng stress",
+        "Cần phục hồi chức năng vận động",
+        "Hạn chế vận động khớp",
+        "Phục hồi sau chấn thương"
+      ],
+      "conditions": [
+        "Đau cơ toàn thân",
+        "Đau vai gáy",
+        "Đau lưng",
+        "Thoái hóa khớp",
+        "Cứng khớp",
+        "Hạn chế vận động",
+        "Sau phẫu thuật cơ xương khớp",
+        "Chấn thương thể thao",
+        "Yếu cơ",
+        "Mất thăng bằng"
+      ],
+      "benefits": [
+        "Thư giãn cơ bắp",
+        "Tăng độ linh hoạt",
+        "Cải thiện vận động",
+        "Giảm căng thẳng",
+        "Phục hồi chức năng toàn diện"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Hỏa long cứu",
+      "description": "Phương pháp trị liệu bằng nhiệt kết hợp châm cứu, sử dụng điếu ngải và cốc hỏa để tăng cường lưu thông khí huyết, giảm đau nhức và lạnh cơ thể.",
+      "duration": 40,
+      "price": 250000,
+      "suitable_for": [
+        "Đau nhức do lạnh",
+        "Đau lưng mạn tính",
+        "Phong thập khớp",
+        "Suy nhược cơ thể",
+        "Tuần hoàn máu kém"
+      ],
+      "conditions": [
+        "Viêm khớp do lạnh",
+        "Phong thập khớp",
+        "Đau lưng mạn tính do lạnh",
+        "Đau vai gáy do lạnh",
+        "Tê bì chi",
+        "Suy nhược thần kinh",
+        "Mệt mỏi mạn tính",
+        "Rối loạn tuần hoàn",
+        "Đau bụng kinh",
+        "Suy giảm miễn dịch"
+      ],
+      "benefits": [
+        "Xua tan phong hàn",
+        "Tăng cường khí huyết",
+        "Giảm đau do lạnh",
+        "Tăng cường sức đề kháng",
+        "Điều hòa âm dương"
+      ]
+    }
+  ],
+  "commonConditions": {
+    "đau_lưng": {
+      "description": "Đau ở vùng lưng, có thể do chấn thương, thoái hóa, hoặc tư thế không đúng",
+      "recommendedServices": [1, 2, 6, 7, 8],
+      "severity": {
+        "nhẹ": [1, 7],
+        "trung_bình": [1, 2, 6, 7],
+        "nặng": [1, 2, 6]
+      }
+    },
+    "đau_vai_gáy": {
+      "description": "Đau ở vùng vai, cổ và gáy, thường do làm việc văn phòng hoặc căng thẳng",
+      "recommendedServices": [1, 2, 6, 7, 8],
+      "severity": {
+        "nhẹ": [1, 7],
+        "trung_bình": [1, 2, 7],
+        "nặng": [1, 2, 6, 7]
+      }
+    },
+    "thoát_vị_đĩa_đệm": {
+      "description": "Tình trạng đĩa đệm bị lồi ra ngoài chèn ép vào rễ thần kinh",
+      "recommendedServices": [1, 2, 6],
+      "severity": {
+        "nhẹ": [1, 6],
+        "trung_bình": [1, 2, 6],
+        "nặng": [1, 6]
+      }
+    },
+    "viêm_khớp": {
+      "description": "Viêm các khớp gây đau, sưng và hạn chế vận động",
+      "recommendedServices": [1, 2, 3, 7],
+      "severity": {
+        "nhẹ": [1, 3, 7],
+        "trung_bình": [1, 2, 3, 7],
+        "nặng": [1, 2, 3]
+      }
+    },
+    "đau_thần_kinh_tọa": {
+      "description": "Đau lan từ lưng xuống mông và chân do chèn ép thần kinh tọa",
+      "recommendedServices": [1, 2, 6],
+      "severity": {
+        "nhẹ": [1, 2],
+        "trung_bình": [1, 2, 6],
+        "nặng": [1, 6]
+      }
+    },
+    "viêm_gân": {
+      "description": "Viêm gân do chấn thương hoặc sử dụng quá mức",
+      "recommendedServices": [1, 3, 4],
+      "severity": {
+        "nhẹ": [1, 3],
+        "trung_bình": [1, 3, 4],
+        "nặng": [1, 4]
+      }
+    },
+    "thoái_hóa_khớp": {
+      "description": "Tình trạng sụn khớp bị mòn dần theo thời gian",
+      "recommendedServices": [1, 2, 3, 7],
+      "severity": {
+        "nhẹ": [1, 7],
+        "trung_bình": [1, 2, 3, 7],
+        "nặng": [1, 2, 3]
+      }
+    },
+    "chấn_thương_thể_thao": {
+      "description": "Chấn thương cơ, gân, dây chằng do hoạt động thể thao",
+      "recommendedServices": [1, 3, 4, 5, 7],
+      "severity": {
+        "nhẹ": [1, 3, 7],
+        "trung_bình": [1, 3, 5, 7],
+        "nặng": [1, 3, 4, 5]
+      }
+    },
+    "đau_mạn_tính": {
+      "description": "Đau kéo dài trên 3 tháng không đáp ứng với điều trị thông thường",
+      "recommendedServices": [1, 2, 4, 7],
+      "severity": {
+        "nhẹ": [1, 2, 7],
+        "trung_bình": [1, 2, 4, 7],
+        "nặng": [1, 4]
+      }
+    },
+    "liệt_yếu_cơ": {
+      "description": "Mất hoặc giảm chức năng vận động của cơ",
+      "recommendedServices": [1, 5, 7],
+      "severity": {
+        "nhẹ": [1, 5, 7],
+        "trung_bình": [1, 5, 7],
+        "nặng": [1, 5]
+      }
+    }
+  },
+  "keywords": {
+    "đau": ["đau", "nhức", "đớn", "đau đớn", "mỏi", "khó chịu"],
+    "viêm": ["viêm", "sưng", "nóng", "đỏ"],
+    "tê": ["tê", "tê bì", "tê tái", "châm chích"],
+    "yếu": ["yếu", "mệt", "không có sức", "liệt"],
+    "khó_vận_động": ["khó vận động", "cứng", "khó cử động", "không cử động được", "hạn chế vận động"],
+    "chấn_thương": ["chấn thương", "bị thương", "té", "ngã", "va đập"],
+    "mạn_tính": ["mạn tính", "lâu ngày", "dai dẳng", "kéo dài"]
+  }
+}

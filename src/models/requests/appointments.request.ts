@@ -12,6 +12,7 @@ export interface CreateAppointmentBody {
   appointmentStartTime: string
   appointmentEndTime: string
   status?: string
+  isCheckout?: boolean
 }
 
 export interface UpdateAppointmentBody {

@@ -11,6 +11,7 @@ import servicesRouter from './routes/services.routes'
 import appointmentsRouter from './routes/appointments.routes'
 import notificationsRouter from './routes/notifications.routes'
 import bedsRouter from './routes/beds.routes'
+import chatbotRouter from './routes/chatbot.routes'
 import databaseServices from './services/database.services'
 import socketService from './services/socket.services'
 
@@ -37,6 +38,7 @@ app.use('/services', servicesRouter)
 app.use('/appointments', appointmentsRouter)
 app.use('/notifications', notificationsRouter)
 app.use('/beds', bedsRouter)
+app.use('/chatbot', chatbotRouter)
 app.use(defaultErrorHandler)
 
 const server = app.listen(port, async () => {

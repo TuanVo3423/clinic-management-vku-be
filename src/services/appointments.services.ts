@@ -50,10 +50,15 @@ class AppointmentsServices {
       patientId: payload.patientId,
       doctorId: payload.doctorId,
       serviceIds: payload.serviceIds,
+      bedId: payload.bedId,
+      isEmergency: payload.isEmergency,
       appointmentStartTime: payload.appointmentStartTime,
       appointmentEndTime: payload.appointmentEndTime,
       price: totalPrice,
-      status: parseStatus(appointmentData.status ?? '') || AppointmentStatus.Pending
+      isCheckout: payload.isCheckout,
+      note: payload.note,
+      status: parseStatus(appointmentData.status ?? '') || AppointmentStatus.Pending,
+      history: appointmentData.history
     }
 
     console.log("data lúc tạo nè", dataForHash);
@@ -327,7 +332,10 @@ class AppointmentsServices {
         appointmentStartTime: updatedAppointment.appointmentStartTime,
         appointmentEndTime: updatedAppointment.appointmentEndTime,
         price: updatedAppointment.price,
-        status: updatedAppointment.status
+        status: updatedAppointment.status,
+        isCheckout: updatedAppointment.isCheckout,
+        note: updatedAppointment.note,
+        history: updatedAppointment.history
       }
 
       // Cập nhật hash lên blockchain (không đợi)
