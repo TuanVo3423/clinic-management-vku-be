@@ -6,6 +6,7 @@ import { AppointmentStatus, parseStatus } from '~/constants/enums'
 import { APPOINTMENTS_MESSAGES } from '~/constants/message'
 import { blockchainService } from './blockchain.services'
 import crypto from 'crypto'
+import Notification, { INotification } from '~/models/schemas/Notification.schema'
 
 class AppointmentsServices {
   async createAppointment(payload: CreateAppointmentBody) {
@@ -33,7 +34,7 @@ class AppointmentsServices {
       history: [
         {
           action: 'created' as const,
-          by: 'system' as const,
+          by: payload.createdBy || 'system',
           timestamp: new Date(),
           details: 'Appointment created'
         }
@@ -51,14 +52,14 @@ class AppointmentsServices {
       doctorId: payload.doctorId,
       serviceIds: payload.serviceIds,
       bedId: payload.bedId,
-      isEmergency: payload.isEmergency,
+      isEmergency: payload.isEmergency || false,
       appointmentStartTime: payload.appointmentStartTime,
       appointmentEndTime: payload.appointmentEndTime,
       price: totalPrice,
-      isCheckout: payload.isCheckout,
+      isCheckout: payload.isCheckout || false,
       note: payload.note,
       status: parseStatus(appointmentData.status ?? '') || AppointmentStatus.Pending,
-      history: appointmentData.history
+      history: appointmentData.history,
     }
 
     console.log("data lúc tạo nè", dataForHash);
@@ -100,7 +101,8 @@ class AppointmentsServices {
       recipientId: new ObjectId(payload.patientId),
       type: 'appointment_created' as const,
       message: `Có lịch hẹn được đặt từ ${payload.appointmentStartTime} đến ${payload.appointmentEndTime}`,
-      channel: 'sms' as const
+      channel: 'sms' as const,
+      createdAt : new Date()
     }
 
     await databaseServices.notifications.insertOne(notificationData as any)
@@ -261,7 +263,7 @@ class AppointmentsServices {
   async updateAppointment(
     _id: string,
     payload: UpdateAppointmentBody,
-    updatedBy: 'system' | 'doctor' | 'patient' = 'system'
+    updatedBy: 'system' | 'doctor' | 'patient'
   ) {
     const updateData: any = { ...payload }
 
@@ -335,7 +337,9 @@ class AppointmentsServices {
         status: updatedAppointment.status,
         isCheckout: updatedAppointment.isCheckout,
         note: updatedAppointment.note,
-        history: updatedAppointment.history
+        history: updatedAppointment.history,
+        bedId: updatedAppointment.bedId?.toString(),
+        isEmergency: updatedAppointment.isEmergency || false
       }
 
       // Cập nhật hash lên blockchain (không đợi)
@@ -370,24 +374,24 @@ class AppointmentsServices {
     // Gửi thông báo cập nhật
     const appointmentData = await this.getAppointment(_id)
     if (appointmentData) {
-      let message = 'Lịch hẹn của bạn đã được cập nhật'
+      let message = `Lịch hẹn của bệnh nhân ${appointmentData.patient[0].fullName ?? ""} đã được cập nhật`
       if (appointmentData.appointmentStartTime && appointmentData.appointmentEndTime) {
         message += ` - Thời gian: ${appointmentData.appointmentStartTime} đến ${appointmentData.appointmentEndTime}`
       }
-      if (appointmentData.appointmentDate) {
-        message += ` vào ngày ${new Date(appointmentData.appointmentDate).toLocaleDateString('vi-VN')}`
-      }
+        message += ` vào ngày ${new Date().toLocaleDateString('vi-VN')}`
 
-      const notificationData = {
+      const notificationData: INotification = {
         appointmentId: appointmentData._id,
         isRead: false,
         recipientType: 'patient' as const,
         recipientId: appointmentData.patientId,
+        status: 'sent' as const,
         type: 'appointment_updated' as const,
         message,
         channel: 'sms' as const
-      }
-      await databaseServices.notifications.insertOne(notificationData as any)
+      };
+      const newNoti = new Notification(notificationData);
+      await databaseServices.notifications.insertOne(newNoti as any)
     }
 
     return appointment
@@ -417,7 +421,7 @@ class AppointmentsServices {
     if (appointmentData) {
       let message = 'Lịch hẹn của bạn đã bị hủy'
       if (appointmentData.appointmentDate) {
-        message += ` vào ngày ${new Date(appointmentData.appointmentDate).toLocaleDateString('vi-VN')}`
+        message += ` vào ngày ${new Date().toLocaleDateString('vi-VN')}`
       }
       if (appointmentData.appointmentStartTime && appointmentData.appointmentEndTime) {
         message += ` từ ${appointmentData.appointmentStartTime} đến ${appointmentData.appointmentEndTime}`
@@ -919,10 +923,15 @@ class AppointmentsServices {
         patientId: appointment.patientId?.toString(),
         doctorId: appointment.doctorId?.toString(),
         serviceIds: appointment.serviceIds?.map((id: any) => id.toString()),
+        bedId: appointment.bedId?.toString(),
+        isEmergency: appointment.isEmergency,
         appointmentStartTime: appointment.appointmentStartTime,
         appointmentEndTime: appointment.appointmentEndTime,
         price: appointment.price,
-        status: appointment.status
+        status: appointment.status,
+        isCheckout: appointment.isCheckout,
+        note: appointment.note,
+        history: appointment.history
       }
 
       console.log("data lúc verify nè", dataForHash);

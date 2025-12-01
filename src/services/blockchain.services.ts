@@ -124,7 +124,7 @@ class BlockchainService {
         console.warn('⚠️ Blockchain service not ready. Skipping hash update.')
         return null
       }
-
+      console.log("data luc update ne", appointmentData)
       // Tạo hash mới
       const newDataHash = this.createDataHash(appointmentData)
 

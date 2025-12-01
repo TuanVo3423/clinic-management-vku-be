@@ -299,7 +299,7 @@ export const updateAppointmentController = async (req: Request<any, any, any>, r
       }
     }
 
-    const appointment = await appointmentsServices.updateAppointment(req.params.appointment_id, req.body, 'system')
+    const appointment = await appointmentsServices.updateAppointment(req.params.appointment_id, req.body, 'doctor')
     return res.json({ message: APPOINTMENTS_MESSAGES.UPDATE_APPOINTMENT_SUCCESS, appointment })
   } catch (error) {
     next(error)

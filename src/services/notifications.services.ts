@@ -10,7 +10,6 @@ class NotificationsServices {
       recipientId: new ObjectId(payload.recipientId),
       appointmentId: new ObjectId(payload.appointmentId)
     }
-
     const notification = await databaseServices.notifications.insertOne(new Notification(notificationData as any))
     return notification
   }

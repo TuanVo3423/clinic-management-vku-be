@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 
-interface INotification {
+export interface INotification {
   _id?: ObjectId
   recipientType: 'patient' | 'doctor'
   recipientId: ObjectId
