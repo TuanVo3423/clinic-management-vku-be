@@ -212,8 +212,6 @@ export const getAppointmentsByTimeRangeController = async (req: Request, res: Re
 
     const startDateTime = new Date(startDate as string)
     const endDateTime = new Date(endDate as string)
-    startDateTime.setHours(startDateTime.getHours() + 7)
-    endDateTime.setHours(endDateTime.getHours() + 7)
     console.log('startDateTime', startDateTime)
     console.log('endDateTime', endDateTime)
 

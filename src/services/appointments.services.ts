@@ -736,7 +736,8 @@ class AppointmentsServices {
                   // Full datetime, parse trực tiếp
                   $dateFromString: {
                     dateString: '$normalizedStartTime',
-                    format: '%Y-%m-%d %H:%M:%S'
+                    format: '%Y-%m-%d %H:%M:%S',
+                    timezone: '+07:00'
                   }
                 },
                 else: {
@@ -744,12 +745,13 @@ class AppointmentsServices {
                   $dateFromString: {
                     dateString: {
                       $concat: [
-                        { $dateToString: { format: '%Y-%m-%d', date: '$appointmentDate' } },
+                        { $dateToString: { format: '%Y-%m-%d', date: '$appointmentDate', timezone: '+07:00' } },
                         ' ',
                         '$normalizedStartTime'
                       ]
                     },
-                    format: '%Y-%m-%d %H:%M:%S'
+                    format: '%Y-%m-%d %H:%M:%S',
+                    timezone: '+07:00'
                   }
                 }
               }
@@ -765,19 +767,21 @@ class AppointmentsServices {
                 then: {
                   $dateFromString: {
                     dateString: '$normalizedEndTime',
-                    format: '%Y-%m-%d %H:%M:%S'
+                    format: '%Y-%m-%d %H:%M:%S',
+                    timezone: '+07:00'
                   }
                 },
                 else: {
                   $dateFromString: {
                     dateString: {
                       $concat: [
-                        { $dateToString: { format: '%Y-%m-%d', date: '$appointmentDate' } },
+                        { $dateToString: { format: '%Y-%m-%d', date: '$appointmentDate', timezone: '+07:00' } },
                         ' ',
                         '$normalizedEndTime'
                       ]
                     },
-                    format: '%Y-%m-%d %H:%M:%S'
+                    format: '%Y-%m-%d %H:%M:%S',
+                    timezone: '+07:00'
                   }
                 }
               }
