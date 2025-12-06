@@ -12,6 +12,7 @@ import appointmentsRouter from './routes/appointments.routes'
 import notificationsRouter from './routes/notifications.routes'
 import bedsRouter from './routes/beds.routes'
 import chatbotRouter from './routes/chatbot.routes'
+import otpRouter from './routes/otp.routes'
 import databaseServices from './services/database.services'
 import socketService from './services/socket.services'
 
@@ -32,6 +33,7 @@ cloudinary.config({
 })
 
 app.use(express.json())
+app.use('/otp', otpRouter)
 app.use('/patients', patientsRouter)
 app.use('/doctors', doctorsRouter)
 app.use('/services', servicesRouter)
