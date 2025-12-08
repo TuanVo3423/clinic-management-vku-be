@@ -194,10 +194,12 @@ export const completeRegisterController = async (
     // Xóa OTP đã sử dụng
     await otpService.deleteVerifiedOtp(email, phone, 'create_patient')
 
+    const patientInfo = await patientsServices.getPatient(patient.insertedId.toString())
+
     return res.status(201).json({
       message: PATIENTS_MESSAGES.REGISTER_SUCCESS,
       data: {
-        patient_id: patient.insertedId
+        patient: patientInfo
       }
     })
   } catch (error) {

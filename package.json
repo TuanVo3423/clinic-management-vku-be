@@ -8,6 +8,7 @@
         "build": "rimraf ./dist && tsc && tsc-alias",
         "start": "node dist/index.js",
         "seed:beds": "ts-node -r tsconfig-paths/register src/utils/seedBeds.ts",
+        "seed:admins": "ts-node -r tsconfig-paths/register src/utils/seedAdmins.ts",
         "seed:services": "ts-node -r tsconfig-paths/register src/utils/seedServices.ts",
         "blockchain:node": "npx hardhat node",
         "blockchain:compile": "npx hardhat compile",
