@@ -93,10 +93,10 @@ async function seedServices() {
     console.log(`✅ Successfully created ${result.insertedCount} services`)
 
     // Display created services
-    const createdServices = await servicesCollection.find().sort({ serviceNumber: 1 }).toArray()
+    const createdServices = await servicesCollection.find().sort({ name: 1 }).toArray()
     console.log('\nCreated services:')
     createdServices.forEach((service) => {
-      console.log(`  - Service ${service.serviceNumber}: ${service.serviceName} (${service.department})`)
+      console.log(`  - Service ${service.name}: ${service.name} (${service.description})`)
     })
   } catch (error) {
     console.error('Error seeding services:', error)

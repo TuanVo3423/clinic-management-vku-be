@@ -46,6 +46,11 @@ class DoctorsServices {
     return doctors
   }
 
+  async getFirstDoctor() {
+    const doctor = await databaseServices.doctors.findOne({})
+    return doctor
+  }
+
   async updateDoctor(_id: string, payload: UpdateDoctorBody) {
     // Hash password nếu có cập nhật password
     if (payload.password) {

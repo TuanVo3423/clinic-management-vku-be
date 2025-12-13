@@ -7,9 +7,11 @@ import { APPOINTMENTS_MESSAGES } from '~/constants/message'
 import { blockchainService } from './blockchain.services'
 import crypto from 'crypto'
 import Notification, { INotification } from '~/models/schemas/Notification.schema'
+import doctorsServices from './doctors.services'
 
 class AppointmentsServices {
   async createAppointment(payload: CreateAppointmentBody) {
+    const defaultDoctor = await doctorsServices.getFirstDoctor()
     // Lấy thông tin các services để tính tổng price
     const serviceObjectIds = payload.serviceIds.map((id) => new ObjectId(id))
     const services = await databaseServices.services
@@ -24,7 +26,7 @@ class AppointmentsServices {
     const appointmentData = {
       ...payload,
       patientId: new ObjectId(payload.patientId),
-      doctorId: payload.doctorId ? new ObjectId(payload.doctorId) : undefined,
+      doctorId: payload.doctorId ? new ObjectId(payload.doctorId) : new ObjectId(defaultDoctor?._id),
       serviceIds: serviceObjectIds,
       bedId: payload.bedId ? new ObjectId(payload.bedId) : undefined,
       appointmentDate: new Date(payload.appointmentDate),
@@ -49,7 +51,7 @@ class AppointmentsServices {
     const dataForHash = {
       _id: appointmentId,
       patientId: payload.patientId,
-      doctorId: payload.doctorId,
+      doctorId: payload.doctorId || defaultDoctor?._id.toString(),
       serviceIds: payload.serviceIds,
       bedId: payload.bedId,
       isEmergency: payload.isEmergency || false,
@@ -59,10 +61,10 @@ class AppointmentsServices {
       isCheckout: payload.isCheckout || false,
       note: payload.note,
       status: parseStatus(appointmentData.status ?? '') || AppointmentStatus.Pending,
-      history: appointmentData.history,
+      history: appointmentData.history
     }
 
-    console.log("data lúc tạo nè", dataForHash);
+    console.log('data lúc tạo nè', dataForHash)
     // Lưu hash lên blockchain (không đợi để không làm chậm response)
     blockchainService
       .storeAppointmentHash(appointmentId, dataForHash)
@@ -102,7 +104,7 @@ class AppointmentsServices {
       type: 'appointment_created' as const,
       message: `Có lịch hẹn được đặt từ ${payload.appointmentStartTime} đến ${payload.appointmentEndTime}`,
       channel: 'sms' as const,
-      createdAt : new Date()
+      createdAt: new Date()
     }
 
     await databaseServices.notifications.insertOne(notificationData as any)
@@ -260,11 +262,7 @@ class AppointmentsServices {
     return appointments
   }
 
-  async updateAppointment(
-    _id: string,
-    payload: UpdateAppointmentBody,
-    updatedBy: 'system' | 'doctor' | 'patient'
-  ) {
+  async updateAppointment(_id: string, payload: UpdateAppointmentBody, updatedBy: 'system' | 'doctor' | 'patient') {
     const updateData: any = { ...payload }
 
     if (payload.doctorId) {
@@ -321,7 +319,6 @@ class AppointmentsServices {
         $push: { history: historyEntry }
       }
     )
-    
 
     // 2. Cập nhật hash lên blockchain (asynchronous)
     const updatedAppointment = await this.getAppointment(_id)
@@ -374,11 +371,11 @@ class AppointmentsServices {
     // Gửi thông báo cập nhật
     const appointmentData = await this.getAppointment(_id)
     if (appointmentData) {
-      let message = `Lịch hẹn của bệnh nhân ${appointmentData.patient[0].fullName ?? ""} đã được cập nhật`
+      let message = `Lịch hẹn của bệnh nhân ${appointmentData.patient[0].fullName ?? ''} đã được cập nhật`
       if (appointmentData.appointmentStartTime && appointmentData.appointmentEndTime) {
         message += ` - Thời gian: ${appointmentData.appointmentStartTime} đến ${appointmentData.appointmentEndTime}`
       }
-        message += ` vào ngày ${new Date().toLocaleDateString('vi-VN')}`
+      message += ` vào ngày ${new Date().toLocaleDateString('vi-VN')}`
 
       const notificationData: INotification = {
         appointmentId: appointmentData._id,
@@ -389,8 +386,8 @@ class AppointmentsServices {
         type: 'appointment_updated' as const,
         message,
         channel: 'sms' as const
-      };
-      const newNoti = new Notification(notificationData);
+      }
+      const newNoti = new Notification(notificationData)
       await databaseServices.notifications.insertOne(newNoti as any)
     }
 
@@ -938,7 +935,7 @@ class AppointmentsServices {
         history: appointment.history
       }
 
-      console.log("data lúc verify nè", dataForHash);
+      console.log('data lúc verify nè', dataForHash)
 
       // Verify với blockchain
       const verifyResult = await blockchainService.verifyAppointmentIntegrity(_id, dataForHash)

@@ -54,7 +54,7 @@ class DatabaseServices {
   }
 
   get otps(): Collection<Otp> {
-    return this.db.collection(process.env.DB_OTPS_COLLECTION || 'otps')
+    return this.db.collection(process.env.DB_OTPS_COLLECTION as string)
   }
 }
 

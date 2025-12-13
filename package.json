@@ -10,6 +10,7 @@
         "seed:beds": "ts-node -r tsconfig-paths/register src/utils/seedBeds.ts",
         "seed:admins": "ts-node -r tsconfig-paths/register src/utils/seedAdmins.ts",
         "seed:services": "ts-node -r tsconfig-paths/register src/utils/seedServices.ts",
+        "delete:db": "ts-node -r tsconfig-paths/register src/utils/clean_db.ts",
         "blockchain:node": "npx hardhat node",
         "blockchain:compile": "npx hardhat compile",
         "blockchain:deploy": "npx hardhat run blockchain/scripts/deploy.ts --network localhost",

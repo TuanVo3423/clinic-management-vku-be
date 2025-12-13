@@ -12,6 +12,7 @@ import appointmentsRouter from './routes/appointments.routes'
 import notificationsRouter from './routes/notifications.routes'
 import bedsRouter from './routes/beds.routes'
 import chatbotRouter from './routes/chatbot.routes'
+import adminChatbotRouter from './routes/admin-chatbot.routes'
 import otpRouter from './routes/otp.routes'
 import databaseServices from './services/database.services'
 import socketService from './services/socket.services'
@@ -41,6 +42,7 @@ app.use('/appointments', appointmentsRouter)
 app.use('/notifications', notificationsRouter)
 app.use('/beds', bedsRouter)
 app.use('/chatbot', chatbotRouter)
+app.use('/admin-chatbot', adminChatbotRouter)
 app.use(defaultErrorHandler)
 
 const server = app.listen(port, async () => {
