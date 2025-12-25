@@ -142,20 +142,30 @@ export const registerPatientController = async (
     }
 
     // Gửi OTP về email
-    const result = await otpService.requestOtp({
+    // const result = await otpService.requestOtp({
+    //   email,
+    //   phone,
+    //   purpose: 'create_patient'
+    // })
+    const patient = await patientsServices.createPatient({
       email,
       phone,
-      purpose: 'create_patient'
+      fullName,
+      dateOfBirth,
+      gender
+    })
+    return res.status(200).json({
+      message: PATIENTS_MESSAGES.REGISTER_SUCCESS,
+      data: patient
     })
 
-    return res.status(200).json({
-      message: PATIENTS_MESSAGES.REGISTER_OTP_SENT,
-      data: {
-        email,
-        phone,
-        expiresAt: result.expiresAt
-      }
-    })
+    // return res.status(200).json({
+    //   message: PATIENTS_MESSAGES.REGISTER_OTP_SENT,
+    //   data: {
+    //     email,
+    //     phone,
+    //   }
+    // })
   } catch (error) {
     next(error)
   }
@@ -228,22 +238,28 @@ export const loginPatientController = async (
     }
 
     // Kiểm tra patient có email không
-    if (!patient.email) {
-      return res.status(400).json({ message: PATIENTS_MESSAGES.PATIENT_EMAIL_REQUIRED })
-    }
+    // if (!patient.email) {
+    //   return res.status(400).json({ message: PATIENTS_MESSAGES.PATIENT_EMAIL_REQUIRED })
+    // }
 
     // Gửi OTP về email
-    const result = await otpService.requestOtp({
-      email: patient.email,
-      phone,
-      purpose: 'get_patient_by_phone'
-    })
+    // const result = await otpService.requestOtp({
+    //   email: patient.email,
+    //   phone,
+    //   purpose: 'get_patient_by_phone'
+    // })
 
+    // return res.status(200).json({
+    //   message: PATIENTS_MESSAGES.LOGIN_OTP_SENT,
+    //   data: {
+    //     email: patient.email, // Trả về email để client biết
+    //     expiresAt: result.expiresAt
+    //   }
+    // })
     return res.status(200).json({
-      message: PATIENTS_MESSAGES.LOGIN_OTP_SENT,
+      message: PATIENTS_MESSAGES.LOGIN_SUCCESS,
       data: {
-        email: patient.email, // Trả về email để client biết
-        expiresAt: result.expiresAt
+        patient
       }
     })
   } catch (error) {

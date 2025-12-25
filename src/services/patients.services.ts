@@ -5,14 +5,16 @@ import Patient from '~/models/schemas/Patient.schema'
 
 class PatientsServices {
   async createPatient(payload: CreatePatientBody) {
+    const defaultEmail = 'default@email.com'
+    const defaultGender = 'male'
     const patientData = {
       ...payload,
-      dateOfBirth: payload.dateOfBirth ? new Date(payload.dateOfBirth) : undefined
+      email: defaultEmail,
+      gender: defaultGender,
+      dateOfBirth: new Date().toISOString()
     }
-    
-    const patient = await databaseServices.patients.insertOne(
-      new Patient(patientData as any)
-    )
+
+    const patient = await databaseServices.patients.insertOne(new Patient(patientData as any))
     return patient
   }
 
@@ -55,13 +57,13 @@ class PatientsServices {
   async findOrCreatePatient(patientData: CreatePatientBody) {
     // Tìm bệnh nhân theo số điện thoại
     let patient = await this.getPatientByPhone(patientData.phone)
-    
+
     if (!patient) {
       // Nếu không tìm thấy, tạo mới
       const result = await this.createPatient(patientData)
       patient = await this.getPatient(result.insertedId.toString())
     }
-    
+
     return patient
   }
 }
