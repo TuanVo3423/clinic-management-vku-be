@@ -64,36 +64,36 @@ class AppointmentsServices {
       history: appointmentData.history
     }
 
-    console.log('data lúc tạo nè', dataForHash)
-    // Lưu hash lên blockchain (không đợi để không làm chậm response)
-    blockchainService
-      .storeAppointmentHash(appointmentId, dataForHash)
-      .then((txHash) => {
-        if (txHash) {
-          // Tạo hash của data
-          const dataHash = crypto
-            .createHash('sha256')
-            .update(JSON.stringify(dataForHash, Object.keys(dataForHash).sort()))
-            .digest('hex')
+    // console.log('data lúc tạo nè', dataForHash)
+    // // Lưu hash lên blockchain (không đợi để không làm chậm response)
+    // blockchainService
+    //   .storeAppointmentHash(appointmentId, dataForHash)
+    //   .then((txHash) => {
+    //     if (txHash) {
+    //       // Tạo hash của data
+    //       const dataHash = crypto
+    //         .createHash('sha256')
+    //         .update(JSON.stringify(dataForHash, Object.keys(dataForHash).sort()))
+    //         .digest('hex')
 
-          // Cập nhật blockchain info vào MongoDB
-          databaseServices.appointments.updateOne(
-            { _id: appointment.insertedId },
-            {
-              $set: {
-                blockchainHash: '0x' + dataHash,
-                blockchainTxHash: txHash,
-                blockchainVerified: true,
-                isPendingSavingToBlockchain: false
-              }
-            }
-          )
-          console.log(`✅ Appointment ${appointmentId} hash stored on blockchain`)
-        }
-      })
-      .catch((error) => {
-        console.error(`❌ Failed to store appointment ${appointmentId} on blockchain:`, error)
-      })
+    //       // Cập nhật blockchain info vào MongoDB
+    //       databaseServices.appointments.updateOne(
+    //         { _id: appointment.insertedId },
+    //         {
+    //           $set: {
+    //             blockchainHash: '0x' + dataHash,
+    //             blockchainTxHash: txHash,
+    //             blockchainVerified: true,
+    //             isPendingSavingToBlockchain: false
+    //           }
+    //         }
+    //       )
+    //       console.log(`✅ Appointment ${appointmentId} hash stored on blockchain`)
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(`❌ Failed to store appointment ${appointmentId} on blockchain:`, error)
+    //   })
 
     // Tạo thông báo sau khi tạo lịch hẹn
     const notificationData = {
@@ -340,32 +340,32 @@ class AppointmentsServices {
       }
 
       // Cập nhật hash lên blockchain (không đợi)
-      blockchainService
-        .updateAppointmentHash(_id, dataForHash)
-        .then((txHash) => {
-          if (txHash) {
-            const dataHash = crypto
-              .createHash('sha256')
-              .update(JSON.stringify(dataForHash, Object.keys(dataForHash).sort()))
-              .digest('hex')
+      // blockchainService
+      //   .updateAppointmentHash(_id, dataForHash)
+      //   .then((txHash) => {
+      //     if (txHash) {
+      //       const dataHash = crypto
+      //         .createHash('sha256')
+      //         .update(JSON.stringify(dataForHash, Object.keys(dataForHash).sort()))
+      //         .digest('hex')
 
-            databaseServices.appointments.updateOne(
-              { _id: new ObjectId(_id) },
-              {
-                $set: {
-                  blockchainHash: '0x' + dataHash,
-                  blockchainTxHash: txHash,
-                  blockchainVerified: true,
-                  isPendingSavingToBlockchain: false
-                }
-              }
-            )
-            console.log(`✅ Appointment ${_id} hash updated on blockchain`)
-          }
-        })
-        .catch((error) => {
-          console.error(`❌ Failed to update appointment ${_id} on blockchain:`, error)
-        })
+      //       databaseServices.appointments.updateOne(
+      //         { _id: new ObjectId(_id) },
+      //         {
+      //           $set: {
+      //             blockchainHash: '0x' + dataHash,
+      //             blockchainTxHash: txHash,
+      //             blockchainVerified: true,
+      //             isPendingSavingToBlockchain: false
+      //           }
+      //         }
+      //       )
+      //       console.log(`✅ Appointment ${_id} hash updated on blockchain`)
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error(`❌ Failed to update appointment ${_id} on blockchain:`, error)
+      //   })
     }
 
     // Gửi thông báo cập nhật
