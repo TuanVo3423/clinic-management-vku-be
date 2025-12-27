@@ -24,7 +24,7 @@ import { watchNotifications } from './watchers/notificationWatcher'
 const app = express()
 const port = 3000
 
-app.use(cors({ origin: 'http://localhost:8080', credentials: true }))
+app.use(cors({ origin: 'https://clinic-management-vku.vercel.app', credentials: true }))
 app.use(bodyParser.json({ limit: '30mb' }))
 app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }))
 cloudinary.config({
