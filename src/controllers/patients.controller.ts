@@ -7,13 +7,10 @@ import {
   FindPatientByPhoneParams
 } from '~/models/requests/patients.request'
 import patientsServices from '~/services/patients.services'
-import otpService from '~/services/otp.services'
 
 const PATIENTS_MESSAGES = {
   CREATE_PATIENT_SUCCESS: 'Create patient successfully',
-  REGISTER_OTP_SENT: 'OTP has been sent to your email. Please verify to complete registration',
   REGISTER_SUCCESS: 'Registration completed successfully',
-  LOGIN_OTP_SENT: 'OTP has been sent to your email. Please verify to login',
   LOGIN_SUCCESS: 'Login successfully',
   GET_PATIENTS_SUCCESS: 'Get patients successfully',
   GET_PATIENT_SUCCESS: 'Get patient successfully',
@@ -21,10 +18,7 @@ const PATIENTS_MESSAGES = {
   DELETE_PATIENT_SUCCESS: 'Delete patient successfully',
   PATIENT_NOT_FOUND: 'Patient not found',
   PHONE_ALREADY_EXISTS: 'Phone number already exists',
-  EMAIL_REQUIRED: 'Email is required for registration',
-  PHONE_REQUIRED: 'Phone number is required',
-  INVALID_OTP: 'Invalid or expired OTP',
-  PATIENT_EMAIL_REQUIRED: 'Patient must have email to login'
+  PHONE_REQUIRED: 'Phone number is required'
 }
 
 export const createPatientController = async (
@@ -117,22 +111,21 @@ export const deletePatientController = async (req: Request<any>, res: Response, 
   }
 }
 
-// REGISTER FLOW
-// Bước 1: Đăng ký - gửi OTP về email
+// REGISTER FLOW - Simplified without OTP
 export const registerPatientController = async (
   req: Request<ParamsDictionary, any, CreatePatientBody>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { email, phone, fullName, dateOfBirth, gender } = req.body
+    const { phone, fullName } = req.body
 
     // Validate
-    if (!email) {
-      return res.status(400).json({ message: PATIENTS_MESSAGES.EMAIL_REQUIRED })
-    }
     if (!phone) {
       return res.status(400).json({ message: PATIENTS_MESSAGES.PHONE_REQUIRED })
+    }
+    if (!fullName) {
+      return res.status(400).json({ message: 'Họ tên là bắt buộc' })
     }
 
     // Kiểm tra xem số điện thoại đã tồn tại chưa
@@ -141,58 +134,11 @@ export const registerPatientController = async (
       return res.status(400).json({ message: PATIENTS_MESSAGES.PHONE_ALREADY_EXISTS })
     }
 
-    // Gửi OTP về email
-    const result = await otpService.requestOtp({
-      email,
-      phone,
-      purpose: 'create_patient'
-    })
-
-    return res.status(200).json({
-      message: PATIENTS_MESSAGES.REGISTER_OTP_SENT,
-      data: {
-        email,
-        phone,
-        expiresAt: result.expiresAt
-      }
-    })
-  } catch (error) {
-    next(error)
-  }
-}
-
-// Bước 2: Xác thực OTP và hoàn tất đăng ký
-export const completeRegisterController = async (
-  req: Request<ParamsDictionary, any, CreatePatientBody & { code: string }>,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { email, phone, code, fullName, dateOfBirth, gender } = req.body
-
-    // Validate
-    if (!email || !phone || !code) {
-      return res.status(400).json({ message: 'Email, phone and OTP code are required' })
-    }
-
-    // Verify OTP
-    try {
-      await otpService.verifyOtp({ email, phone, code, purpose: 'create_patient' })
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message || PATIENTS_MESSAGES.INVALID_OTP })
-    }
-
-    // Tạo patient
+    // Tạo patient trực tiếp
     const patient = await patientsServices.createPatient({
-      email,
-      phone,
       fullName,
-      dateOfBirth,
-      gender
+      phone
     })
-
-    // Xóa OTP đã sử dụng
-    await otpService.deleteVerifiedOtp(email, phone, 'create_patient')
 
     const patientInfo = await patientsServices.getPatient(patient.insertedId.toString())
 
@@ -290,3 +236,7 @@ export const completeLoginController = async (
     next(error)
   }
 }
+
+// Kept for backward compatibility if needed
+export const completeRegisterController = registerPatientController
+export const completeLoginController = loginPatientController
