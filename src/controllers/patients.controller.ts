@@ -128,9 +128,9 @@ export const registerPatientController = async (
     const { email, phone, fullName, dateOfBirth, gender } = req.body
 
     // Validate
-    if (!email) {
-      return res.status(400).json({ message: PATIENTS_MESSAGES.EMAIL_REQUIRED })
-    }
+    // if (!email) {
+    //   return res.status(400).json({ message: PATIENTS_MESSAGES.EMAIL_REQUIRED })
+    // }
     if (!phone) {
       return res.status(400).json({ message: PATIENTS_MESSAGES.PHONE_REQUIRED })
     }
