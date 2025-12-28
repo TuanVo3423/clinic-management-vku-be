@@ -8,6 +8,7 @@ import {
 } from '~/models/requests/patients.request'
 import patientsServices from '~/services/patients.services'
 import otpService from '~/services/otp.services'
+import databaseServices from '~/services/database.services'
 
 const PATIENTS_MESSAGES = {
   CREATE_PATIENT_SUCCESS: 'Create patient successfully',
@@ -128,9 +129,9 @@ export const registerPatientController = async (
     const { email, phone, fullName, dateOfBirth, gender } = req.body
 
     // Validate
-    if (!email) {
-      return res.status(400).json({ message: PATIENTS_MESSAGES.EMAIL_REQUIRED })
-    }
+    // if (!email) {
+    //   return res.status(400).json({ message: PATIENTS_MESSAGES.EMAIL_REQUIRED })
+    // }
     if (!phone) {
       return res.status(400).json({ message: PATIENTS_MESSAGES.PHONE_REQUIRED })
     }
@@ -154,9 +155,15 @@ export const registerPatientController = async (
       dateOfBirth,
       gender
     })
+
+    const patientInfo = await databaseServices.patients.findOne({
+      _id: patient.insertedId
+    })
     return res.status(200).json({
       message: PATIENTS_MESSAGES.REGISTER_SUCCESS,
-      data: patient
+      data: {
+        patient: patientInfo
+      }
     })
 
     // return res.status(200).json({
